@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Completude e aproximação · Cálculo</title>
+<meta name="description" content="Supremo, completude, propriedade arquimediana, pontos de acumulação e densidade. Demonstrações completas com construções interativas.">
+<link rel="stylesheet" href="assets/course.css"><script defer src="assets/math.js"></script><script defer src="assets/course.js"></script>
+</head><body>
+<a class="skip" href="#cotas">Pular para a aula</a>
+<main class="wrap">
+<nav class="topbar" aria-label="Principal"><a href="index.html" class="brand">← Cálculo em uma variável real</a><span>Aula 02</span></nav>
+<header class="hero">
+ <div class="eyebrow">Fatos básicos · A reta real</div><h1>Completude<br>e aproximação</h1>
+ <p class="lede">Um conjunto pode se aproximar de um extremo sem contê-lo. Para conjuntos reais não vazios e limitados superiormente, a completude garante a existência do supremo. A propriedade arquimediana permite construir aproximações dentro de qualquer tolerância positiva.</p>
+ <p class="meta">Referência: seção 1.1, pp. 18–23 · Pré-requisitos: ordem, intervalos e módulo</p>
+ <ol class="route"><li><a href="#cotas"><span>1</span>Cotas</a></li><li><a href="#supremo"><span>2</span>Supremo</a></li><li><a href="#infimo"><span>3</span>Ínfimo</a></li><li><a href="#completude"><span>4</span>Completude</a></li><li><a href="#irracionais"><span>5</span>Irracionais</a></li><li><a href="#arquimediana"><span>6</span>Arquimedes</a></li><li><a href="#reciprocos"><span>7</span>Recíprocos</a></li><li><a href="#acumulacao"><span>8</span>Acumulação</a></li><li><a href="#densidade"><span>9</span>Densidade</a></li></ol>
+ <p class="intro-note">Usaremos ℕ = {0, 1, 2, …} e ℕ⁺ = {1, 2, …}. Uma afirmação “para todo ε &gt; 0” exige um argumento que funcione para qualquer ε positivo. Nas bancadas com tolerância, escolha ε ou δ e acompanhe a construção do ponto que a prova exige.</p>
+</header>
+<noscript><p class="intro-note">Ative o JavaScript para usar as figuras interativas. Os enunciados e as demonstrações permanecem disponíveis no texto.</p></noscript>
+
+<section class="lesson" id="cotas">
+ <div class="text"><span class="num">Passo 1 · Definições 1.1.6 e 1.1.9</span><h2>Limitar um conjunto</h2>
+  <p>Uma cota superior de A ⊂ ℝ é um real M tal que x ≤ M para todo x ∈ A. Se alguma cota superior existe, A é limitado superiormente. Uma cota inferior é um real m tal que m ≤ x para todo x ∈ A.</p>
+  <p>O conjunto A é limitado se existem cotas nos dois sentidos. Equivalentemente, existe R &gt; 0 tal que |x| ≤ R para todo x ∈ A: de m ≤ x ≤ M, basta tomar R = max{|m|, |M|} + 1. Reciprocamente, |x| ≤ R implica −R ≤ x ≤ R.</p>
+  <div class="statement"><h3>Supremo e máximo</h3><p>Para A ≠ ∅, um real L é seu supremo se é uma cota superior e L ≤ M para toda cota superior M. Escrevemos L = sup A. Se L ∈ A, ele é também o máximo: L = max A.</p></div>
+  <p>Por exemplo, sup(0, 1) = 1 e sup(0, 1] = 1. Apenas o segundo conjunto tem máximo. Mudar a inclusão do extremo não muda seu valor como menor cota superior.</p>
+  <p class="reference">Livro: definições 1.1.6, 1.1.9 e 1.1.12, pp. 18–19.</p>
+ </div>
+ <figure class="bench" id="lab-bounds" data-lab="bounds"><figcaption>Proponha uma cota M. Se M &lt; 1, a bancada constrói um ponto do intervalo acima de M; se M ≥ 1, todos os pontos do intervalo ficam abaixo de M.</figcaption></figure>
+</section>
+
+<section class="lesson" id="supremo" data-result="caracterizacao-do-supremo">
+ <div class="text"><span class="num">Passo 2 · Definição 1.1.10</span><h2>Qualquer diminuição perde a cota</h2>
+  <div class="statement"><h3>Caracterização do supremo</h3><p>Sejam A ⊂ ℝ não vazio e limitado superiormente, e L ∈ ℝ. Então L = sup A se, e somente se, valem:</p><div class="equation">∀x ∈ A, x ≤ L;<br>∀ε &gt; 0, ∃x ∈ A : L − ε &lt; x.</div></div>
+  <p>A primeira condição diz que L é cota. A segunda diz que todo número estritamente menor que L deixa algum elemento de A acima dele.</p>
+  <p>Para A = (0, 1), dado ε &gt; 0, podemos escolher x = 1 − min{ε/2, 1/2}. Esse ponto pertence a A e satisfaz 1 − ε &lt; x &lt; 1. A escolha funciona também quando ε é grande.</p>
+  <p class="reference">Livro: definições equivalentes 1.1.9–1.1.10 e observação 1.1.11, p. 19. A equivalência é demonstrada abaixo.</p>
+ </div>
+ <figure class="bench" id="lab-supremum" data-lab="supremum" data-proof="proof-supremum"><figcaption>Escolha ε. O ponto x fica estritamente entre L − ε e L, dentro de A = (0, 1).</figcaption></figure>
+ <div class="proof"><h3>Demonstração da equivalência</h3><ol id="proof-supremum">
+  <li>Suponha L = sup A. A primeira condição faz parte da definição. Dado ε &gt; 0, o número L − ε é menor que a menor cota superior e, portanto, não é cota superior.</li>
+  <li>Negar que L − ε seja cota significa: existe x ∈ A com L − ε &lt; x. Isso prova a segunda condição.</li>
+  <li>Reciprocamente, suponha as duas condições e seja M uma cota superior qualquer. Se M &lt; L, tome ε = L − M &gt; 0. A segunda condição fornece x ∈ A com M = L − ε &lt; x, contradizendo que M é cota.</li>
+  <li>Logo L ≤ M para toda cota superior M. Como a primeira condição garante que L é cota, L é a menor delas: L = sup A.</li>
+ </ol></div>
+</section>
+
+<section class="lesson" id="infimo" data-result="infimo-por-reflexao">
+ <div class="text"><span class="num">Passo 3 · Definições 1.1.14 e 1.1.15</span><h2>O ínfimo por reflexão</h2>
+  <p>O ínfimo de A ≠ ∅ é a maior cota inferior e se escreve inf A. Se pertence a A, é o mínimo, min A. Sua caracterização é:</p>
+  <div class="equation">m = inf A ⇔<br>∀x ∈ A, m ≤ x, &nbsp; e<br>∀ε &gt; 0, ∃x ∈ A : x &lt; m + ε.</div>
+  <div class="statement"><h3>Relação entre ínfimo e supremo</h3><p>Se A ≠ ∅ é limitado inferiormente e −A = {−x : x ∈ A}, então −A é limitado superiormente. Sempre que s = sup(−A) existe, inf A = −s.</p></div>
+  <p>A reflexão x ↦ −x inverte todas as desigualdades. Assim, o resultado de existência de supremos que adotaremos no próximo passo dará também a existência de ínfimos.</p>
+  <p class="reference">Livro: definições 1.1.14–1.1.15 e consequência da completude, p. 21.</p>
+ </div>
+ <figure class="bench" id="lab-infimum" data-lab="infimum" data-proof="proof-infimum"><figcaption>Reflita A = (a, b] na origem. Altere a para acompanhar a troca de sinal entre o extremo inferior de A e o superior de −A.</figcaption></figure>
+ <div class="proof"><h3>Demonstração</h3><ol id="proof-infimum">
+  <li>Se m₀ é uma cota inferior de A, então m₀ ≤ x para todo x ∈ A. Logo −x ≤ −m₀ e −A é limitado superiormente.</li>
+  <li>Se s = sup(−A), então −x ≤ s para todo x ∈ A. Portanto −s ≤ x: o número −s é uma cota inferior de A.</li>
+  <li>Se m é outra cota inferior de A, −m é cota superior de −A. Pela definição de s, s ≤ −m, isto é, m ≤ −s. Logo −s é a maior cota inferior de A.</li>
+ </ol><p><strong>Caracterização por ε.</strong> Se m = inf A, então m é cota inferior. Para todo ε &gt; 0, m + ε &gt; m não pode ser cota inferior; portanto existe x ∈ A com x &lt; m + ε. Reciprocamente, suponha que m seja cota inferior e que essa condição valha para todo ε &gt; 0. Se uma cota inferior m′ fosse maior que m, escolhendo ε = m′ − m &gt; 0 obteríamos x ∈ A com x &lt; m + ε = m′, contradizendo que m′ é cota inferior. Logo toda cota inferior m′ satisfaz m′ ≤ m, e m = inf A.</p></div>
+</section>
+
+<section class="lesson" id="completude" data-result="existencia-raiz-dois">
+ <div class="text"><span class="num">Passo 4 · Axioma da completude</span><h2>A existência de um extremo real</h2>
+  <div class="statement"><h3>Axioma da completude</h3><p>Todo subconjunto não vazio de ℝ que é limitado superiormente possui supremo em ℝ.</p></div>
+  <p>Adotamos essa propriedade como axioma. A figura ilustra uma de suas consequências, cuja demonstração depende do axioma.</p>
+  <div class="statement"><h3>Uma consequência</h3><p>Existe um único real s ≥ 0 tal que s² = 2. Denotamos esse número por √2.</p></div>
+  <p>Considere S = {x ∈ ℝ : x ≥ 0 e x² &lt; 2}. Temos 1 ∈ S e 2 é uma cota superior. O axioma fornece s = sup S, com 1 ≤ s ≤ 2. Falta provar que s² = 2.</p>
+  <p class="reference">Livro: discussão de √2 e axioma da completude, pp. 20–21. A demonstração detalhada da existência abaixo é um desenvolvimento para a aula.</p>
+ </div>
+ <figure class="bench" id="lab-completeness" data-lab="completeness" data-proof="proof-completeness"><figcaption>Proponha um candidato s. Se s² &lt; 2, construímos um elemento de S acima dele; se s² &gt; 2, uma cota superior menor.</figcaption></figure>
+ <div class="proof"><h3>Demonstração da existência e unicidade</h3><ol id="proof-completeness">
+  <li>O conjunto S é não vazio e limitado superiormente. Pela completude, existe s = sup S e 1 ≤ s ≤ 2.</li>
+  <li>Se s² &lt; 2, escolha h = min{1, (2 − s²)/(2(2s + 1))} &gt; 0. Como h ≤ 1, temos 2sh + h² ≤ (2s + 1)h ≤ (2 − s²)/2. Logo (s + h)² &lt; 2. Assim s + h ∈ S, contradizendo que s é cota superior.</li>
+  <li>Se s² &gt; 2, escolha h = min{s/2, (s² − 2)/(4s)} &gt; 0. Então s − h &gt; 0 e (s − h)² ≥ s² − 2sh ≥ (s² + 2)/2 &gt; 2. Todo x ∈ S satisfaz x &lt; s − h, pois x ≥ 0 e x² &lt; 2. Portanto s − h é uma cota superior menor que s, contradizendo a minimalidade do supremo.</li>
+  <li>Resta s² = 2. Se 0 ≤ t &lt; s, então s² − t² = (s − t)(s + t) &gt; 0. Portanto t² ≠ s². Esse argumento, com os papéis trocados se necessário, prova a unicidade da raiz não negativa.</li>
+ </ol></div>
+</section>
+
+<section class="lesson" id="irracionais" data-result="irracionalidade-raiz-dois">
+ <div class="text"><span class="num">Passo 5 · Racionais e irracionais</span><h2>Uma aproximação racional não é uma igualdade</h2>
+  <div class="statement"><h3>Irracionalidade de √2</h3><p>Não existem inteiros p, q, com q ≠ 0, tais que √2 = p/q.</p></div>
+  <p>As frações 7/5 e 17/12 são aproximações de √2, mas seus quadrados não são 2. A demonstração precisa excluir toda fração, inclusive aquelas que não aparecem na bancada.</p>
+  <p>Usaremos o fato aritmético de que o quadrado de um inteiro ímpar é ímpar: (2k + 1)² = 2(2k² + 2k) + 1. Assim, se o quadrado de um inteiro é par, o inteiro também é par.</p>
+  <p class="reference">Livro: discussão e prova da irracionalidade, pp. 20–21. Aqui usamos a prova por paridade, em vez da prova por redução do denominador apresentada na foto.</p>
+ </div>
+ <figure class="bench" id="lab-irrationality" data-lab="irrationality" data-proof="proof-irrationality"><figcaption>Compare p² e 2q² usando inteiros exatos. Avance pela prova para ver por que uma igualdade forçaria um fator comum.</figcaption></figure>
+ <div class="proof"><h3>Demonstração por contradição</h3><ol id="proof-irrationality">
+  <li>Suponha √2 = p/q, com p, q ∈ ℕ⁺ e a fração irredutível. Isso é possível se √2 for racional, pois ele é positivo.</li>
+  <li>Elevando ao quadrado, p² = 2q². Logo p² é par, e o fato aritmético acima implica p = 2k para algum inteiro k.</li>
+  <li>Substituindo, 4k² = 2q², de modo que q² = 2k². Assim q também é par.</li>
+  <li>Os inteiros p e q seriam ambos divisíveis por 2, em contradição com a irredutibilidade. Portanto √2 é irracional.</li>
+ </ol></div>
+ <div class="exercises"><details><summary>Explorar aproximações racionais por bisseção</summary><div><p>Em cada passo, subdividimos um intervalo de extremos racionais. Escolhemos a metade cujos extremos têm quadrados abaixo e acima de 2. A largura cai pela metade, enquanto √2 permanece no interior.</p><figure class="bench" id="lab-bisection" data-lab="bisection"><figcaption>O enquadramento é verificado por quadrados de inteiros. A figura amplia o intervalo a cada bisseção.</figcaption></figure></div></details></div>
+</section>
+
+<section class="lesson" id="aritmetica-irracional" data-result="aritmetica-racionais-irracionais">
+ <div class="text"><span class="num">Proposições 1.1.16 e 1.1.17</span><h2>Somar e multiplicar por um racional</h2>
+  <div class="statement"><h3>Enunciados</h3><p>Se r ∈ ℚ e α ∈ ℝ ∖ ℚ, então r + α é irracional. Se, além disso, r ≠ 0, então rα também é irracional.</p></div>
+  <p>A hipótese r ≠ 0 é necessária no produto: 0·α = 0 é racional. Para a soma, r pode ser zero.</p>
+  <p>A bancada fixa α = √2 e permite escolher os racionais r e q. Se tentássemos impor r + α = q, teríamos de identificar α com o racional q − r. No produto com r ≠ 0, a tentativa rα = q exigiria α = q/r.</p>
+  <p class="reference">Livro: proposições 1.1.16–1.1.17 e demonstrações, p. 22.</p>
+ </div>
+ <figure class="bench" id="lab-arithmetic" data-lab="arithmetic" data-proof="proof-arithmetic"><figcaption>Escolha a operação e os racionais. Compare a posição de √2 com o racional que uma igualdade exigiria.</figcaption></figure>
+ <div class="proof"><h3>Demonstrações</h3><ol id="proof-arithmetic">
+  <li><strong>Soma.</strong> Suponha r + α = q ∈ ℚ. Então α = q − r. Como a diferença de dois racionais é racional, isso contradiz α ∉ ℚ.</li>
+  <li><strong>Produto.</strong> Suponha r ≠ 0 e rα = q ∈ ℚ. Dividindo por r, α = q/r ∈ ℚ, novamente uma contradição. Para r = 0 a divisão é impossível e a conclusão realmente falha.</li>
+ </ol></div>
+</section>
+
+<section class="lesson" id="arquimediana" data-result="propriedade-arquimediana">
+ <div class="text"><span class="num">Passo 6 · Teorema 1.1.18</span><h2>Passos positivos ultrapassam qualquer cota</h2>
+  <div class="statement"><h3>Propriedade arquimediana</h3><p>Para quaisquer x, y ∈ ℝ com x &gt; 0, existe n ∈ ℕ tal que nx &gt; y.</p></div>
+  <p>O tamanho x do passo pode ser muito pequeno. A afirmação garante que um número finito de passos basta para ultrapassar qualquer y fixado.</p>
+  <p>Na prova, supomos que A = {nx : n ∈ ℕ} tem uma cota superior. Seu supremo L forneceria um múltiplo mx a menos de x de L. O múltiplo seguinte ultrapassaria L, produzindo a contradição.</p>
+  <p class="reference">Livro: teorema 1.1.18 e demonstração, p. 22.</p>
+ </div>
+ <figure class="bench" id="lab-archimedean" data-lab="archimedean" data-proof="proof-archimedean"><figcaption>L é uma cota proposta. A bancada exibe um múltiplo acima dela. Na prova, a existência do múltiplo próximo de um supremo hipotético decorre da caracterização por ε.</figcaption></figure>
+ <div class="proof"><h3>Demonstração por contradição</h3><ol id="proof-archimedean">
+  <li>Fixe x &gt; 0. Se a conclusão fosse falsa para algum y, teríamos nx ≤ y para todo n ∈ ℕ. Assim A = {nx : n ∈ ℕ} seria não vazio e limitado superiormente.</li>
+  <li>Pela completude, existiria L = sup A. Use ε = x na caracterização do supremo: existe m ∈ ℕ tal que L − x &lt; mx.</li>
+  <li>Somando x, obtemos L &lt; (m + 1)x. Mas (m + 1)x ∈ A, contradizendo que L é cota superior de A. Logo a conclusão vale para todo y ∈ ℝ.</li>
+ </ol></div>
+</section>
+
+<section class="lesson" id="reciprocos" data-result="reciproco-menor-que-epsilon">
+ <div class="text"><span class="num">Passo 7 · Corolário 1.1.19</span><h2>Construir um recíproco menor que ε</h2>
+  <div class="statement"><h3>Corolário</h3><p>Para todo ε &gt; 0 existe n ∈ ℕ⁺ tal que 1/n &lt; ε.</p></div>
+  <p>A ordem dos quantificadores importa: primeiro alguém escolhe ε; depois escolhemos n, que pode depender de ε. Um único n não serve para todas as tolerâncias positivas.</p>
+  <p>Na bancada, ε = p/1000. A escolha n = ⌊1000/p⌋ + 1 garante n &gt; 1/ε. A notação ⌊t⌋ significa o maior inteiro menor ou igual a t. A existência desse inteiro será justificada no argumento de densidade.</p>
+  <p class="reference">Livro: corolário 1.1.19, p. 22.</p>
+ </div>
+ <figure class="bench" id="lab-reciprocal" data-lab="reciprocal" data-proof="proof-reciprocal"><figcaption>A escala se ajusta a ε. A construção escolhe n depois da tolerância e mantém a desigualdade estrita mesmo quando 1/ε é inteiro.</figcaption></figure>
+ <div class="proof"><h3>Demonstração</h3><ol id="proof-reciprocal">
+  <li>Dado ε &gt; 0, aplique a propriedade arquimediana a x = ε e y = 1. Existe n ∈ ℕ tal que nε &gt; 1.</li>
+  <li>Necessariamente n &gt; 0. Divida a desigualdade por n e obtenha 1/n &lt; ε.</li>
+ </ol></div>
+ <div class="exercises"><details><summary>Exercícios · Escolher uma testemunha</summary><div><ol class="exercise-list">
+  <li>Encontre um n que satisfaça 1/n &lt; 1/100. O valor n = 100 serve?<details><summary>Ver resolução</summary><div class="answer">n = 101 serve, pois 1/101 &lt; 1/100. O valor 100 produz igualdade e não satisfaz a desigualdade estrita.</div></details></li>
+  <li>Prove que B = {1 − 1/n : n ∈ ℕ⁺} tem supremo 1 e não tem máximo.<details><summary>Ver resolução</summary><div class="answer">Para todo n ≥ 1, 1 − 1/n &lt; 1, então 1 é cota superior e não pertence a B. Dado ε &gt; 0, o corolário fornece n com 1/n &lt; ε. Logo 1 − ε &lt; 1 − 1/n ∈ B. Pela caracterização do supremo, sup B = 1. Como esse supremo não pertence ao conjunto, B não tem máximo.</div></details></li>
+ </ol></div></details></div>
+</section>
+
+<section class="lesson" id="acumulacao" data-result="acumulacao-e-infinitude">
+ <div class="text"><span class="num">Passo 8 · Definições 1.1.20–1.1.22</span><h2>Encontrar outro ponto em toda vizinhança</h2>
+  <p>Para a ∈ ℝ e δ &gt; 0, escrevemos Bδ(a) = (a − δ, a + δ). Uma vizinhança de a é qualquer intervalo aberto que o contém. Um conjunto U ⊂ ℝ é aberto quando, para todo a ∈ U, existe δ &gt; 0 com Bδ(a) ⊂ U.</p>
+  <div class="statement"><h3>Ponto de acumulação</h3><p>O ponto a ∈ ℝ é de acumulação de A ⊂ ℝ quando</p><div class="equation">∀δ &gt; 0, ∃x ∈ A : 0 &lt; |x − a| &lt; δ.</div></div>
+  <p>O ponto a pode pertencer a A ou estar fora dele. A desigualdade 0 &lt; |x − a| exige que a vizinhança contenha outro ponto.</p>
+  <div class="statement"><h3>Consequência</h3><p>Toda vizinhança de um ponto de acumulação de A contém infinitos pontos de A. Portanto conjuntos finitos não têm pontos de acumulação.</p></div>
+  <p class="reference">Livro: definições 1.1.20–1.1.22, p. 22; exemplos e exercício de infinitude, p. 23.</p>
+ </div>
+ <figure class="bench" id="lab-accumulation" data-lab="accumulation" data-proof="proof-accumulation"><figcaption>O centro é a = 0. Compare um intervalo, os recíprocos, os inteiros e um conjunto finito. A linha inferior amplia a vizinhança escolhida.</figcaption></figure>
+ <div class="proof"><h3>Demonstração da consequência</h3><ol id="proof-accumulation">
+  <li>Suponha a ponto de acumulação de A. Fixe δ &gt; 0 e suponha, por contradição, que Bδ(a) contenha apenas finitos pontos de A distintos de a, chamados x₁, …, xₘ.</li>
+  <li>Se m = 0, a própria vizinhança contradiz a definição de acumulação. Se m ≥ 1, todas as distâncias |xᵢ − a| são positivas, e o mínimo de uma lista finita dessas distâncias também é positivo.</li>
+  <li>Tome η = min{δ/2, |x₁ − a|/2, …, |xₘ − a|/2} &gt; 0. A vizinhança Bη(a) está contida em Bδ(a) e não contém nenhum dos xᵢ. Também não contém outros pontos de A distintos de a, pela escolha da lista.</li>
+  <li>Isso contradiz a definição de ponto de acumulação. Logo Bδ(a) contém infinitos pontos de A. Todo intervalo aberto V que contém a inclui alguma Bδ(a): para V = (u, v), escolha δ &gt; 0 menor que as distâncias aos extremos finitos. Assim toda vizinhança contém infinitos pontos de A. Se A for finito, isso é impossível, e A não tem pontos de acumulação.</li>
+ </ol></div>
+ <div class="exercises"><details><summary>Demonstrações dos exemplos da bancada</summary><div>
+  <p><strong>Intervalo (0, 1).</strong> O ponto 0 não pertence ao intervalo. Para todo δ &gt; 0, escolha x = min{δ/2, 1/2}. Então 0 &lt; x &lt; 1 e |x| &lt; δ; portanto 0 é ponto de acumulação.</p>
+  <p><strong>Inteiros.</strong> Para qualquer a ∈ ℝ, se a ∈ ℤ, a vizinhança de raio 1/2 não contém outro inteiro. Se a ∉ ℤ, escolha os inteiros consecutivos k &lt; a &lt; k + 1 e um raio menor que min{a − k, k + 1 − a}. Essa vizinhança não contém inteiros. Assim ℤ não tem pontos de acumulação. A existência de k é justificada na prova do próximo passo.</p>
+  <p><strong>Recíprocos.</strong> Para D = {1/n : n ∈ ℕ⁺}, o corolário do passo 7 mostra que 0 é ponto de acumulação, embora 0 ∉ D. Ele é o único: se a &lt; 0, use o raio |a|/2. Se a &gt; 0, escolha N com 1/N &lt; a/2. Todos os termos com n ≥ N ficam abaixo de a/2. Restam apenas os finitos termos com n &lt; N; escolha um raio menor que a/2 e que as distâncias positivas de a a esses termos, excluindo o próprio a se ele for um deles. A vizinhança não conterá outro ponto de D.</p>
+  <p><strong>Intervalos em geral.</strong> Se A = (u, v), u &lt; v, seus pontos de acumulação formam [u, v]. Dado δ &gt; 0, para a = u ou a = v tome h = min{δ/2, (v − u)/2} &gt; 0 e escolha, respectivamente, x = u + h ou x = v − h. Esses pontos pertencem a A e satisfazem 0 &lt; |x − a| &lt; δ. Para u &lt; a &lt; v, tome h = min{δ/2, (v − a)/2} e x = a + h. Se a &lt; u, o raio (u − a)/2 dá uma vizinhança sem pontos de A; se a &gt; v, use (a − v)/2. Isso prova as duas inclusões.</p>
+ </div></details></div>
+</section>
+
+<section class="lesson" id="densidade" data-result="densidade-dos-racionais">
+ <div class="text"><span class="num">Passo 9 · Corolário 1.1.25</span><h2>Um racional dentro de qualquer intervalo</h2>
+  <div class="statement"><h3>Densidade dos racionais</h3><p>Para quaisquer a, b ∈ ℝ com a &lt; b, existe r ∈ ℚ tal que a &lt; r &lt; b.</p></div>
+  <p>Escolha uma malha de passo 1/n menor que a largura b − a. O primeiro ponto k/n estritamente à direita de a ainda ficará antes de b. O argumento funciona também para extremos negativos.</p>
+  <p>Dizemos que E ⊂ ℝ é denso em ℝ quando toda vizinhança de todo real contém um ponto de E. O enunciado garante essa propriedade para E = ℚ.</p>
+  <p class="reference">Livro: corolário 1.1.25, definição 1.1.26 e observação 1.1.27, p. 23. A prova abaixo explicita a escolha do inteiro para extremos de qualquer sinal.</p>
+ </div>
+ <figure class="bench" id="lab-density" data-lab="density" data-proof="proof-density"><figcaption>Reduza a largura e desloque o intervalo. A malha se refina e a fração k/n é construída de modo a ficar estritamente no interior.</figcaption></figure>
+ <div class="proof"><h3>Demonstração</h3><ol id="proof-density">
+  <li>Fixe a &lt; b. Pelo corolário do passo 7, escolha n ∈ ℕ⁺ tal que 1/n &lt; b − a.</li>
+  <li>Existe um inteiro k com k − 1 ≤ na &lt; k. Para justificar: E = {j ∈ ℤ : j &gt; na} é não vazio pela propriedade arquimediana e limitado inferiormente. Seja t = inf E. Escolha k ∈ E com k &lt; t + 1/2. Se algum j ∈ E fosse menor que k, teríamos j ≤ k − 1 &lt; t, uma contradição. Logo k é o menor elemento de E; portanto k − 1 ≤ na &lt; k.</li>
+  <li>Dividindo por n &gt; 0, obtemos a &lt; k/n ≤ a + 1/n &lt; b. Assim r = k/n é o racional procurado.</li>
+ </ol><p>O mesmo argumento estabelece a existência de ⌊u⌋ para qualquer real u: escolha k − 1 ≤ u &lt; k e tome ⌊u⌋ = k − 1. Essa é a operação usada nos cálculos das bancadas.</p></div>
+</section>
+
+<section class="lesson" id="densidade-irracional" data-result="densidade-dos-irracionais">
+ <div class="text"><span class="num">Observação 1.1.27</span><h2>Um irracional no mesmo intervalo</h2>
+  <div class="statement"><h3>Densidade dos irracionais</h3><p>Para quaisquer a &lt; b, existe α ∈ ℝ ∖ ℚ tal que a &lt; α &lt; b.</p></div>
+  <p>Translade o intervalo por −√2, escolha um racional nele e desfaça a translação. A soma desse racional com √2 é irracional, como provamos no passo 5.</p>
+  <p>A conclusão envolve a existência de pontos de tipos diferentes em intervalos arbitrariamente pequenos. A classificação como racional ou irracional decorre da forma exata do número, independentemente da aproximação decimal mostrada.</p>
+  <p class="reference">Livro: observação 1.1.27, p. 23. A referência usa um produto com um irracional; aqui usamos uma translação para a demonstração.</p>
+ </div>
+ <figure class="bench" id="lab-irrational-density" data-lab="irrational-density" data-proof="proof-irrational-density"><figcaption>O intervalo inferior é transladado de volta por √2. O ponto tem a forma exata k/n + √2.</figcaption></figure>
+ <div class="proof"><h3>Demonstração</h3><ol id="proof-irrational-density">
+  <li>Como a − √2 &lt; b − √2, a densidade dos racionais fornece q ∈ ℚ tal que a − √2 &lt; q &lt; b − √2.</li>
+  <li>Some √2 aos três termos. O número α = q + √2 pertence a (a, b).</li>
+  <li>Pela proposição sobre soma de racional e irracional, α ∉ ℚ. Logo os irracionais são densos em ℝ.</li>
+ </ol><p>Todo real a é ponto de acumulação tanto de ℚ quanto dos irracionais: dado δ &gt; 0, aplique os resultados ao intervalo (a, a + δ). O ponto obtido é diferente de a e está a uma distância menor que δ. Pela consequência do passo 8, toda vizinhança contém infinitos pontos de cada um desses conjuntos.</p></div>
+</section>
+
+<section class="coming" aria-label="Cola da aula"><h3>Cola da aula</h3><p>Supremo: menor cota superior. Máximo: supremo que pertence ao conjunto. Ínfimo: maior cota inferior. Completude: existência de supremo para conjuntos reais não vazios e limitados superiormente. Acumulação: ∀δ &gt; 0, ∃x ∈ A com 0 &lt; |x − a| &lt; δ. Densidade: todo intervalo aberto não vazio contém um ponto do conjunto.</p></section>
+<nav class="lesson-nav" aria-label="Aulas"><a href="ordem-e-distancia.html">← Ordem e distância</a><a href="index.html">Todas as aulas →</a></nav>
+<footer class="colophon"><p>Referência: capítulo 1, “Fatos Básicos”, das fotos fornecidas por Gabriel. Enunciados gerais preservados; explicações, demonstrações desenvolvidas e exercícios próprios.</p></footer>
+</main></body></html>

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap');
+:root {
+  --paper:#fff; --soft:#f3f5f9; --ink:#172033; --muted:#566079; --line:#d3d9e3;
+  --accent:#3b3fd8; --accent-soft:#e9eafd; --blue:#1c7fd6; --red:#c83b2b;
+  --green:#087959; --amber:#a56300; --display:'Bricolage Grotesque','Avenir Next',sans-serif;
+  --body:'Atkinson Hyperlegible','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.65 var(--body)}
+a{color:var(--accent);text-underline-offset:4px}
+button,input,select{font:inherit}
+button,a,input,select,summary{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.skip{position:absolute;left:12px;top:-90px;background:white;padding:12px;z-index:9}
+.skip:focus{top:12px}
+.wrap{width:min(1180px,100%);padding:36px 24px 80px;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:22px;border-bottom:1px solid var(--line);font-size:15px}
+.topbar a{text-decoration:none}
+.brand{font-weight:700;color:var(--ink)}
+.eyebrow,.num{font:700 12px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.11em;color:var(--accent)}
+.hero{display:grid;gap:22px;padding:48px 0 36px;border-bottom:1px solid var(--line)}
+h1,h2,h3{font-family:var(--display);line-height:1.12;letter-spacing:-.025em;margin:0}
+h1{font-size:clamp(46px,7vw,88px);font-weight:800;max-width:16ch}
+h2{font-size:clamp(29px,3.5vw,39px);font-weight:700}
+h3{font-size:23px}
+p,ol,ul{margin:0}
+.lede{font-size:20px;max-width:66ch;color:var(--muted)}
+.meta{font:13px/1.7 var(--mono);color:var(--muted)}
+.route{display:flex;gap:9px;flex-wrap:wrap;list-style:none;padding:0}
+.route a{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:28px;padding:7px 13px 7px 8px;font-size:14px;color:var(--ink);text-decoration:none}
+.route a:hover{border-color:var(--accent)}
+.route span{background:var(--accent-soft);color:var(--accent);font:700 12px var(--mono);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;flex:none}
+.intro-note{border-left:3px solid var(--accent);padding:3px 0 3px 16px;font-size:16px;max-width:76ch}
+.lesson{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:26px 40px;padding:54px 0;border-bottom:1px solid var(--line);scroll-margin-top:24px;align-items:start}
+.lesson>*{min-width:0}
+.text{display:grid;gap:17px}
+.text p{max-width:66ch}
+.statement{padding:18px 20px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 10px 10px 0;display:grid;gap:9px}
+.statement h3{font-size:19px;letter-spacing:0}
+.equation{padding:14px 16px;background:var(--soft);border-radius:9px;font:19px/1.8 'Cambria Math',Cambria,'Times New Roman',serif;overflow-wrap:anywhere}
+.equation small{display:block;color:var(--muted);font:14px/1.6 var(--body);margin-top:6px}
+.proof{grid-column:1 / -1;border:1px solid var(--line);border-radius:12px;padding:22px 25px;display:grid;gap:14px}
+.proof h3{font-size:21px}
+.proof ol{display:grid;gap:11px;padding-left:28px}
+.proof li{padding:8px 12px;border-left:3px solid transparent;border-radius:5px}
+.proof li.active{background:var(--accent-soft);border-left-color:var(--accent)}
+.proof .equation{font-size:19px;background:transparent;padding:6px 0}
+.proof p{max-width:100ch}
+.proof-note{font-size:15px;color:var(--muted)}
+.bench{margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;align-self:start;background:var(--paper)}
+.bench svg{display:block;width:100%;height:auto;aspect-ratio:2/1;background:white;font-family:var(--mono)}
+.bench svg text{font-size:18px;fill:var(--muted)}
+.bench svg .strong{fill:var(--ink);font-size:20px;font-weight:700}
+.diagram-caption{padding:11px 16px 14px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+.controls{display:grid;gap:13px;padding:17px}
+.control{display:grid;grid-template-columns:100px minmax(60px,1fr) 72px;gap:12px;align-items:center;font-size:15px}
+.control output{font:700 13px var(--mono);text-align:right}
+.control.select{grid-template-columns:100px minmax(0,1fr)}
+.control.select select{min-width:0;width:100%;font-size:14px;padding:7px;border:1px solid var(--line);background:white;border-radius:7px;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent);min-height:24px;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
+.stat{display:grid;gap:4px;padding:12px 16px;background:white;min-width:0}
+.stat span{font-size:12px;color:var(--muted)}
+.stat b{font:700 15px/1.5 var(--mono);overflow-wrap:anywhere}
+.stat:last-child:nth-child(odd){grid-column:1 / -1}
+.reading{padding:14px 16px;font-size:15px;background:var(--accent-soft);border-top:1px solid var(--line);min-height:80px}
+.proof-control{border-top:1px solid var(--line);padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.proof-control span{font-size:13px;color:var(--muted);margin-right:auto}
+button{padding:7px 11px;background:var(--soft);border:1px solid var(--line);border-radius:7px;color:var(--ink);font-size:13px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:disabled{opacity:.45;cursor:default}
+.talk{padding-left:15px;border-left:3px solid #c38a24;display:grid;gap:8px}
+.talk h3{font:700 12px var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.talk ul{padding-left:19px;font-size:16px;display:grid;gap:5px}
+.exercises{grid-column:1 / -1;display:grid;gap:14px}
+details{border:1px solid var(--line);border-radius:9px;padding:13px 18px}
+summary{cursor:pointer;font-weight:700;line-height:1.5}
+details>div{padding-top:15px;display:grid;gap:12px}
+.exercise-list{padding-left:23px;display:grid;gap:18px}
+.exercise-list li{padding-left:6px}
+.exercise-list details{margin-top:9px;background:var(--soft);font-size:16px}
+.answer{font-size:16px}
+.tag{font:700 11px var(--mono);color:var(--green);text-transform:uppercase;letter-spacing:.06em}
+.wide{grid-column:1 / -1}
+.colophon{display:grid;gap:8px;padding-top:25px;font-size:14px;color:var(--muted)}
+.lesson-nav{display:flex;justify-content:space-between;gap:24px;padding-top:34px;font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;padding-top:36px}
+.card{border:1px solid var(--line);border-radius:14px;padding:27px;display:grid;gap:17px;color:var(--ink);text-decoration:none;transition:border-color .15s}
+.card:hover{border-color:var(--accent)}
+.card h2{font-size:31px}
+.card p{font-size:17px;color:var(--muted)}
+.card .go{color:var(--accent);font-weight:700;font-size:16px}
+.coming{margin-top:38px;border-top:1px solid var(--line);padding-top:25px;display:grid;gap:12px}
+.coming ul{padding-left:23px;max-width:75ch}
+.reference{font-size:13px;color:var(--muted);margin-top:2px}
+.reference a{color:inherit}
+@media(max-width:880px){.lesson{grid-template-columns:minmax(0,1fr);gap:24px}.text p{max-width:none}.bench{max-width:660px;width:100%;justify-self:center}.proof{padding:19px}.hero{padding-top:34px}.lesson{padding:40px 0}}
+@media(max-width:560px){body{font-size:17px}.wrap{padding:22px 17px 55px}.topbar{font-size:13px;gap:10px}.lede{font-size:18px}.hero{gap:19px}.cards{grid-template-columns:minmax(0,1fr)}.card{padding:23px}.proof{padding:15px 12px}.proof ol{padding-left:23px}.proof li{padding:7px 8px}.control{grid-template-columns:83px minmax(45px,1fr) 66px;gap:8px}.control.select{grid-template-columns:83px minmax(0,1fr)}.controls{padding:14px}.statement{padding:15px}.equation{font-size:18px}.bench svg text{font-size:19px}.stat{padding:11px 12px}.stat b{font-size:13px}.lesson-nav{font-size:15px}.proof-control span{flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
+@media print{.controls,.proof-control,.skip,.topbar{display:none}.wrap{width:100%;padding:0}.lesson{break-inside:avoid;grid-template-columns:1fr}.proof li{padding:0}.hero h1{font-size:42px}details{display:block}}
