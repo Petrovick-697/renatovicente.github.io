@@ -6,17 +6,85 @@
   const supers={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁻':'-','ⁿ':'n'};
   const subs={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-','ₙ':'n','ₘ':'m','ᵢ':'i'};
   symbols['η']='\\eta ';symbols['′']='^{\\prime}';
+  // Composição tipográfica de quocientes; não simplifica nem avalia a expressão.
+  function fractionBars(source,command='dfrac'){
+    let s=String(source),cursor=0;
+    const pairs={'(':')','[':']','{':'}','\\{':'\\}','\\lfloor':'\\rfloor','\\lceil':'\\rceil'};
+    const closing=Object.fromEntries(Object.entries(pairs).map(([a,b])=>[b,a]));
+    const stops=new Set(['+','-','−','=','<','>',',',';',':','&','&lt;','&gt;','/','\\\\','\\in','\\notin','\\le','\\ge','\\ne','\\approx','\\iff','\\implies','\\to','\\mapsto','\\subseteq','\\setminus','\\cup','\\cap','\\forall','\\exists','\\min','\\max','\\sup','\\inf','\\text','\\pm','\\cdot','\\times','\\ldots']);
+    const tokenize=value=>[...value.matchAll(/\\[A-Za-z]+|\\.|&(?:lt|gt|amp);|\d+(?:(?:\{,\}|\.)\d+)?|[^\s]/g)].map(m=>({value:m[0],start:m.index,end:m.index+m[0].length}));
+    function ungroup(value){
+      const t=tokenize(value);if(t[0]?.value!=='('||t.at(-1)?.value!==')')return value;
+      let level=0;for(let i=0;i<t.length;i++){if(t[i].value==='(')level++;if(t[i].value===')')level--;if(!level&&i<t.length-1)return value;}
+      return value.slice(t[0].end,t.at(-1).start).trim();
+    }
+    while(s.indexOf('/',cursor)>=0){
+      const slash=s.indexOf('/',cursor),tokens=tokenize(s),at=tokens.findIndex(t=>t.start===slash),stack=[];let left=at-1;
+      for(;left>=0;left--){const value=tokens[left].value;
+        if(value==='|'){if(stack.at(-1)==='|')stack.pop();else stack.push('|');continue;}
+        if(closing[value]){stack.push(closing[value]);continue;}
+        if(pairs[value]){if(stack.at(-1)===value){stack.pop();continue;}break;}
+        if(!stack.length&&stops.has(value))break;
+      }
+      left++;let right=at+1;
+      function groupEnd(start){
+        const begin=tokens[start]?.value;
+        if(begin==='\\left'){const end=groupEnd(start+1);return end;}
+        const finish=begin==='|'?'|':pairs[begin];if(!finish)return start;
+        const nested=[finish];for(let j=start+1;j<tokens.length;j++){
+          const value=tokens[j].value;if(value===nested.at(-1)){nested.pop();if(!nested.length)return j+1;}
+          else if(pairs[value])nested.push(pairs[value]);
+        }return start;
+      }
+      let first=tokens[right]?.value;
+      if(first==='+'||first==='-'||first==='−'){right++;first=tokens[right]?.value;}
+      if(!first||stops.has(first)||closing[first]){cursor=slash+1;continue;}
+      if(pairs[first]||first==='|'||first==='\\left')right=groupEnd(right);
+      else{
+        right++;
+        const args=['\\frac','\\dfrac','\\tfrac'].includes(first)?2:['\\sqrt','\\mathbb','\\mathrm','\\operatorname'].includes(first)?1:0;
+        for(let j=0;j<args;j++){const end=groupEnd(right);if(end===right)break;right=end;}
+      }
+      // Chamadas de função e índices/expoentes pertencem ao denominador.
+      while(tokens[right]){
+        const next=tokens[right].value;
+        if(next==='('){const end=groupEnd(right);if(end===right)break;right=end;}
+        else if(next==='^'||next==='_'){right++;if(tokens[right]?.value==='{')right=groupEnd(right);else if(tokens[right])right++;}
+        else break;
+      }
+      if(left>=at||right<=at+1){cursor=slash+1;continue;}
+      const start=tokens[left].start,end=tokens[right-1].end;
+      const numerator=ungroup(s.slice(start,slash).trim()),denominator=ungroup(s.slice(tokens[at+1].start,end).trim());
+      s=s.slice(0,start)+`\\${command}{${numerator}}{${denominator}}`+s.slice(end);cursor=start;
+    }
+    return s;
+  }
+  function stretchFractions(source){
+    // Delimitadores matemáticos acompanham a altura da fração, sem avaliar a expressão.
+    let s=String(source),changed=true;const close={'(':')','\\{':'\\}','\\lfloor':'\\rfloor','\\lceil':'\\rceil'};
+    while(changed){changed=false;const stack=[];
+      for(const match of s.matchAll(/\\lfloor|\\rfloor|\\lceil|\\rceil|\\[{}]|[()]/g)){
+        const value=match[0],index=match.index;
+        if(close[value])stack.push({index,value,stretched:s.slice(Math.max(0,index-5),index)==='\\left'});
+        else if(stack.length&&close[stack.at(-1).value]===value){const entry=stack.pop(),body=s.slice(entry.index+entry.value.length,index);
+          if(!entry.stretched&&/\\(?:d?frac|tfrac)\{/.test(body)&&s.slice(Math.max(0,index-6),index)!=='\\right'){
+            s=s.slice(0,entry.index)+'\\left'+entry.value+body+'\\right'+value+s.slice(index+value.length);changed=true;break;
+          }
+        }
+      }
+    }return s;
+  }
   function tex(source){
-    let s=String(source).trim().replace(/B([δη])/g,'B_$1').replace(/χℚ/g,'χ_ℚ').replace(/[{}]/g,c=>'\\'+c);
-    // As barras de fração são mantidas no modo compacto; as fórmulas de destaque
-    // usam frações explícitas na fonte HTML quando necessário.
+    const raw=String(source).trim();
+    let s=raw.replace(/B([δη])/g,'B_$1').replace(/χℚ/g,'χ_ℚ').replace(/[{}]/g,c=>'\\'+c);
     s=s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻ⁿ]+/g,t=>`^{${[...t].map(c=>supers[c]).join('')}}`).replace(/[₀₁₂₃₄₅₆₇₈₉₊₋ₙₘᵢ]+/g,t=>`_{${[...t].map(c=>subs[c]).join('')}}`);
     s=s.replace(/√(max|min)\\\{([^{}]*)\\\}/g,'\\sqrt{\\$1\\{$2\\}}');
     s=s.replace(/√(?:\(([^()]*)\)|([\p{L}\p{N}]+(?:\^\{[^}]+\})?))/gu,(_,group,atom)=>`\\sqrt{${group||atom}}`);
     s=s.replace(/(?<!\\)\b(sup|inf|max|min|sin|cos|tan|exp|ln|log)\b/g,'\\$1 ').replace(/\bsen\b/g,'\\sin ');
     s=s.replace(/[ℝℚℤℕεδηαλθπχ∞∅∈∉⊂⊆∖∪∩∀∃⇒⇔→←↦≤≥≠≈∘·×…−±⌊⌋′]/g,c=>symbols[c]);
     s=s.replace(/_([A-Za-z]|\\mathbb\{[A-Z]\}|\\(?:delta|chi) )/g,'_{$1}');
-    return s;
+    if(raw.includes('/')&&!/[{}\[\];]/.test(raw))s=s.replace(/(\d),(\d)/g,'$1{,}$2');
+    return stretchFractions(fractionBars(s));
   }
   const words=new Set(('x y z a b c d f g h i j k m n p q r s t u v A B C D E F G H I L M N P Q R S T U V ab xy ca cb cx mx nx nf ng pf pc cq fg na nS rα jT kT mT pT qT sh α ε δ λ θ π χ ℝ ℚ ℤ ℕ sup inf max min sen sin cos tan exp ln log').split(' '));
   const token=/[A-Za-zÀ-ÖØ-öø-ÿ]+|[α-ωΑ-Ωℝℚℤℕ]+|\d+(?:[.,]\d+)?|\s+|./gu;
@@ -66,22 +134,30 @@
   }
   function svgLabels(svg){
     if(typeof document==='undefined'||!window.katex)return [];
+    const view=svg.viewBox.baseVal,renderedWidth=svg.getBoundingClientRect().width||view.width;
+    const fontSize=Math.max(17,13*view.width/renderedWidth);
     const nodes=[...svg.querySelectorAll('text')],measurement=document.createElement('div');
-    measurement.className='svg-label math-measure';document.body.append(measurement);
+    measurement.className='svg-label math-measure';measurement.style.fontSize=fontSize+'px';document.body.append(measurement);
     const labels=nodes.map(node=>{
       const value=node.textContent,markup=/^[−-]?\d+(?:[,.]\d+)?$/.test(value)?`\\(${tex(value)}\\)`:mark(value);
       measurement.innerHTML=markup;render(measurement);
       const rect=measurement.getBoundingClientRect();
       return {node,value,markup:measurement.innerHTML,width:Math.ceil(rect.width)+6,height:Math.ceil(rect.height)+2,x:Number(node.getAttribute('x')),y:Number(node.getAttribute('y')),anchor:node.getAttribute('text-anchor')||'middle',color:node.getAttribute('fill')||'#566079'};
     });
-    measurement.remove();const view=svg.viewBox.baseVal,positions=placeLabels(labels,view.width,view.height),overflow=[];
+    measurement.remove();const positions=placeLabels(labels,view.width,view.height),overflow=[];
     labels.forEach((item,i)=>{
       const box=positions[i];if(!box){overflow.push({label:item.value,color:item.color});item.node.remove();return;}
       const fo=document.createElementNS('http://www.w3.org/2000/svg','foreignObject');
       for(const [key,value] of Object.entries(box))fo.setAttribute(key,value);
-      const div=document.createElementNS('http://www.w3.org/1999/xhtml','div');div.className='svg-label';div.style.color=item.color;div.innerHTML=item.markup;fo.append(div);item.node.replaceWith(fo);
+      const div=document.createElementNS('http://www.w3.org/1999/xhtml','div');div.className='svg-label';div.style.fontSize=fontSize+'px';div.style.color=item.color;div.innerHTML=item.markup;fo.append(div);item.node.replaceWith(fo);
     });return overflow;
   }
+  function observeSvg(svg,redraw){
+    if(typeof ResizeObserver==='undefined')return;
+    let previous=svg.getBoundingClientRect().width;
+    const observer=new ResizeObserver(()=>{const width=svg.getBoundingClientRect().width;if(Math.abs(width-previous)>1){previous=width;redraw();}});
+    observer.observe(svg);return observer;
+  }
   if(typeof document!=='undefined')document.addEventListener('DOMContentLoaded',()=>render(document.body));
-  return Object.freeze({tex,mark,render,legacy,escape,placeLabels,svgLabels,choiceName});
+  return Object.freeze({tex,mark,render,legacy,escape,placeLabels,svgLabels,observeSvg,choiceName,fractionBars,stretchFractions});
 });

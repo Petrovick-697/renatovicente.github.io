@@ -407,6 +407,7 @@
     }
     render();
     document.fonts?.ready.then(render);
+    window.CourseMath?.observeSvg(svg,render);
   }
   document.querySelectorAll('[data-lab]').forEach(mount);
 })();

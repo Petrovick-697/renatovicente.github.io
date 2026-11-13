@@ -8,11 +8,37 @@ test('todas as fórmulas TeX das quatro aulas compilam com o renderizador local'
   assert.ok(html.includes('assets/vendor/katex/katex.min.js'));
   for(const m of html.matchAll(/\\\(([\s\S]*?)\\\)|\\\[([\s\S]*?)\\\]/g)){
    assert.ok(!(m[1]||m[2]).includes('<'),'Desigualdades em HTML precisam usar &lt; dentro do TeX.');
+   assert.ok(!(m[1]||m[2]).includes('/'),'Quocientes matemáticos devem usar uma barra horizontal em TeX.');
    const tex=(m[1]||m[2]).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
    assert.doesNotThrow(()=>K.renderToString(tex,{throwOnError:true,strict:'error'}),page+': '+tex);count++;
   }
  }
  assert.ok(count>1000);
+});
+test('frações preservam numeradores, denominadores, sinais e agrupamentos',()=>{
+ for(const [source,expected] of [
+  ['nf(p/n)','nf(\\dfrac{p}{n})'],
+  ['f(x)/g(x)','\\dfrac{f(x)}{g(x)}'],
+  ['r^{2}\\theta/2','\\dfrac{r^{2}\\theta}{2}'],
+  ['(2-s^{2})/(2(2s+1))','\\dfrac{2-s^{2}}{2(2s+1)}'],
+  ['p/-n','\\dfrac{p}{-n}'],
+  ['p/(q/r)','\\dfrac{p}{\\dfrac{q}{r}}'],
+  ['\\min\\{0,1/2\\}','\\min\\{0,\\dfrac{1}{2}\\}']
+ ])assert.equal(M.fractionBars(source),expected);
+ const decimal=M.tex('(y - 0,5)/-0,5');assert.equal(decimal,'\\dfrac{y - 0{,}5}{-0{,}5}');
+ for(const source of ['nf(p/n)','f((p/q)x)','⌊1000/p⌋','(y - 0,5)/-0,5']){
+  const tex=M.tex(source);assert.ok(!tex.includes('/'));assert.doesNotThrow(()=>K.renderToString(tex,{throwOnError:true,strict:'error'}));
+ }
+});
+test('os números da navegação não herdam a estrutura interna do LaTeX',()=>{
+ const css=fs.readFileSync(path.join(root,'assets/course.css'),'utf8');assert.ok(!/\.route\s+span\s*\{/.test(css));
+ for(const page of ['ordem-e-distancia','completude-e-aproximacao','funcoes-e-inversas']){
+  const html=fs.readFileSync(path.join(root,page+'.html'),'utf8');
+  const badges=[...html.matchAll(/<span class="route-step">([^<]+)<\/span>/g)];assert.ok(badges.length>=6);
+  for(const badge of badges)assert.match(badge[1],/^\d+$/);
+ }
+ const first=fs.readFileSync(path.join(root,'ordem-e-distancia.html'),'utf8');
+ assert.match(first,/<p class="hypotheses">Hipóteses:/);assert.ok(!first.includes('\\].<small>Hipóteses'));
 });
 test('as referências matemáticas abrem em nova aba e levam a âncoras existentes',()=>{
  let refs=0;

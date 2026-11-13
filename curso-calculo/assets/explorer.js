@@ -45,4 +45,5 @@
     else window.CourseMath.legacy(element,element.textContent);
   }
   document.fonts?.ready.then(render);
+  window.CourseMath?.observeSvg(svg,render);
 })();

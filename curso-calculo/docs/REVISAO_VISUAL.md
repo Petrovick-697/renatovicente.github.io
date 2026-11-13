@@ -22,3 +22,13 @@ Solicitação de Gabriel: remover sobreposições e elementos pequenos, usar LaT
 - Sete exemplos do explorador e modos de sobreposição conferidos. Gráficos continuam sendo aproximações; as regras de classificação matemática foram preservadas.
 
 Os registros de testes confirmam os estados examinados, não uma garantia para toda expressão arbitrária. Os limites matemáticos e numéricos do explorador permanecem explícitos na ferramenta. A prévia local solicitada foi preservada.
+
+## Ajuste de leitura após as capturas seguintes
+
+Gabriel aprovou o padrão geral e pediu frações com barra horizontal, aumento discreto do texto e correção de pequenos componentes. Esse padrão passa a orientar o curso em `PADRAO_EDITORIAL.md` e `AGENTS.md`.
+
+- Convertidos os quocientes de 70 expressões literais para frações em TeX, preservando os agrupamentos. As bancadas também compõem seus quocientes com barra horizontal. O explorador mantém `/` no campo de entrada e usa a notação matemática na prévia.
+- Texto principal aumentado de 18 para 19 px no computador e de 17 para 18 px no celular. Títulos preservados. Referências, legendas, controles e valores auxiliares receberam ajustes proporcionais; rótulos principais dos diagramas têm mínimo efetivo de 13 px na tela e são recompostos quando a largura muda.
+- Contadores de navegação separados do KaTeX, com estilo restrito a `.route-step`. Corrigida a caixa da equivalência de distância: fórmula em destaque e hipóteses em linha. A pontuação acompanha as expressões, sem gerar linhas isoladas.
+- 33 testes passaram, incluindo sinais, numeradores, denominadores, agrupamentos e o caso de coeficiente decimal negativo nas frações. As fórmulas literais compilaram sem erros; nenhum quociente com barra inclinada permanece nelas.
+- As quatro páginas foram conferidas em larguras CSS de 1440 e 390 px. Nos estados examinados, houve zero erros de KaTeX, sem recorte/sobreposição de rótulos e sem rolagem horizontal da página. Conferidos também a fração na prova de linearidade, os botões da navegação, a caixa de hipóteses, a inversa afim com coeficiente negativo decimal e o exemplo periódico do explorador.

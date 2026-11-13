@@ -24,6 +24,8 @@ Não é necessário instalar pacotes. Os testes conferem as construções usadas
 
 As fórmulas são escritas em LaTeX e renderizadas pelo KaTeX 0.19.1, distribuído com suas fontes e licença em `assets/vendor/katex/`. A renderização matemática funciona sem conexão. As referências aos resultados abrem o enunciado em nova aba.
 
+O padrão aprovado de conteúdo, tipografia e componentes está em [docs/PADRAO_EDITORIAL.md](docs/PADRAO_EDITORIAL.md): frações com barra horizontal, texto compacto e legível, provas completas e legendas sem sobreposição.
+
 ## Organização
 
 - `index.html`: entrada das aulas disponíveis.
