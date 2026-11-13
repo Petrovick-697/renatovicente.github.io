@@ -27,7 +27,10 @@ Não é necessário instalar pacotes. Os testes conferem as construções usadas
 - `index.html`: entrada das aulas disponíveis.
 - `ordem-e-distancia.html`: ordem, intervalos, módulo e desigualdades.
 - `completude-e-aproximacao.html`: cotas, completude, propriedade arquimediana, acumulação e densidade.
+- `funcoes-e-inversas.html`: funções, imagem e pré-imagem, operações, composição e inversa.
+- `simetria-e-monotonicidade.html`: paridade, períodos, monotonicidade, linearidade e área orientada.
+- Nessa aula, `#explorador` aceita funções digitadas, analisa famílias reconhecidas e compara gráficos. A opção de domínio permite obter ramos inversos. “Não determinado” indica o limite da análise simbólica, sem inferir propriedades globais da amostragem.
 - `assets/`: apresentação, interações e cálculos.
 - `docs/`: correspondência com as fotos, planejamento e verificações.
 
-O material está em desenvolvimento local. O restante do capítulo — funções e trigonometria — está mapeado em `docs/ROTEIRO.md`. Não foram copiados arquivos do repositório privado do Renato, que permanece inacessível pela conexão disponível.
+O material está em desenvolvimento. O restante do capítulo — trigonometria, limitação e extremos — está mapeado em `docs/ROTEIRO.md`. Não foram copiados arquivos do repositório privado do Renato.

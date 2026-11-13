@@ -40,3 +40,4 @@ Os testes de amostras e de interface não provam os teoremas: essa função pert
 A navegação foi testada por HTTP local. A abertura direta por `file:` não foi executada pelo navegador de verificação, que bloqueia esse protocolo. O código não usa carregamento dinâmico, pacotes externos obrigatórios ou servidor de aplicação; o uso direto dos HTML fica como verificação adicional possível no navegador do usuário. As fontes externas são opcionais.
 
 O restante do capítulo está planejado e ainda não foi implementado. Autor e edição do livro continuam pendentes de identificação. O material não foi publicado nem integrado ao repositório privado do Renato.
+Atualização: as aulas 03–04 e o explorador aberto foram acrescentados. A verificação específica está em [VERIFICACAO_03_04.md](VERIFICACAO_03_04.md); os registros anteriores abaixo se referem à entrega das aulas 01–02.

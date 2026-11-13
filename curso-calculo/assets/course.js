@@ -29,6 +29,7 @@
     density: {label:'Construção de um racional no interior de um intervalo', controls:[range('center','Centro',-16,16,1,2,v=>fmt(v/8)),range('power','Largura 2⁻ʲ; j',0,12,1,1)]},
     'irrational-density': {label:'Translação de um racional para construir um irracional no intervalo', controls:[range('center','Centro',-16,16,1,2,v=>fmt(v/8)),range('power','Largura 2⁻ʲ; j',0,12,1,1)]}
   };
+  Object.assign(config,window.CalculoLessons?.config||{});
   function text(x,y,value,color=muted,anchor='middle',strong=false) {
     return `<text x="${x}" y="${y}" text-anchor="${anchor}" fill="${color}" style="fill:${color}"${strong?' class="strong"':''}>${escape(value)}</text>`;
   }
@@ -306,6 +307,8 @@
       const stage=shift?['Primeiro escolhemos q racional no intervalo transladado (a − √2, b − √2).','Somar √2 transporta o ponto q para α = q + √2, dentro de (a, b).','A diferença entre α e o racional q é √2. Se α também fosse racional, essa diferença seria racional: contradição.'][s.step]:['Escolha n de modo que o passo 1/n seja menor que b − a.','O primeiro ponto k/n à direita de a satisfaz (k − 1)/n ≤ a < k/n. A existência do inteiro é justificada na prova.','O ponto r = k/n satisfaz a < r ≤ a + 1/n < b. A malha garante a inclusão estrita no intervalo.'][s.step];
       return result(svg,[['Intervalo (a; b)',`(${fmt(a,7)}; ${fmt(b,7)})`],['Fração construída',`${w.k}/${w.n}`],['Número no intervalo',shift?`${w.k}/${w.n} + √2`:`${w.k}/${w.n}`],['Aproximação','≈ '+fmt(q+shift,8)]],stage);
     }
+    const extra=window.CalculoLessons?.drawers?.[kind];
+    if(extra) return extra(s,{text,segment,point,axis,intervalDrawing,result,fmt,escape,ink,muted,blue,purple,red,green,line,soft});
     throw new Error(`Bancada desconhecida: ${kind}`);
   }
   function mount(figure) {
@@ -333,6 +336,7 @@
         if(kind==='arithmetic'&&item.key==='operation') state.step=state.operation==='sum'?0:1;
         if(kind==='completeness'&&item.key==='p') state.step=state.p*state.p<20000?1:2;
         if(kind==='accumulation'&&item.key==='kind') state.step=0;
+        window.CalculoLessons?.onInput?.[kind]?.(state,item.key);
         render();
       });
       controls.append(row);
@@ -357,6 +361,7 @@
             if(state.step===2&&state.p*state.p<20000) state.p=160;
           }
           if(kind==='accumulation'&&state.step>0&&['integers','finite'].includes(state.kind)) state.kind='reciprocal';
+          window.CalculoLessons?.onStep?.[kind]?.(state);
           render();
         });
       }
@@ -364,11 +369,14 @@
     }
     figure.replaceChildren(svg,controls,stats,reading,...(steps.length?[proofControl]:[]),caption);
     function render() {
+      cfg.normalize?.(state);
       for(const item of cfg.controls) {
-        controls.querySelector(`[data-key="${item.key}"]`).value=state[item.key];
+        const input=controls.querySelector(`[data-key="${item.key}"]`);
+        if(typeof item.max==='function') input.max=item.max(state);
+        input.value=state[item.key];
         if(item.options) continue;
         const output=controls.querySelector(`[data-output="${item.key}"]`);
-        output.textContent=item.display?item.display(state[item.key]):fmt(state[item.key]);
+        output.textContent=item.display?item.display(state[item.key],state):fmt(state[item.key]);
       }
       const r=draw(kind,state);
       svg.innerHTML=`<desc>${escape(r.reading)}</desc>${r.svg}`;

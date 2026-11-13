@@ -2,7 +2,7 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
-const pages=['index.html','ordem-e-distancia.html','completude-e-aproximacao.html'];
+const pages=['index.html','ordem-e-distancia.html','completude-e-aproximacao.html','funcoes-e-inversas.html','simetria-e-monotonicidade.html'];
 test('as páginas possuem identificadores únicos e links locais resolvidos',()=>{
   for(const page of pages) {
     const html=fs.readFileSync(path.join(root,page),'utf8');
@@ -10,7 +10,7 @@ test('as páginas possuem identificadores únicos e links locais resolvidos',()=
     assert.equal(new Set(ids).size,ids.length,`IDs duplicados em ${page}`);
     for(const [,url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       if(/^(https?:|mailto:)/.test(url)) continue;
-      const [file,hash]=url.split('#'),target=path.join(root,file||page);
+      const [rawFile,hash]=url.split('#'),file=rawFile.split('?')[0],target=path.join(root,file||page);
       assert.ok(fs.existsSync(target),`Destino ausente: ${page} -> ${url}`);
       if(hash) assert.ok(fs.readFileSync(target,'utf8').includes(`id="${hash}"`),`Âncora ausente: ${url}`);
     }
@@ -31,5 +31,5 @@ test('cada resultado declarado tem enunciado, prova e bancada ligada à prova',(
       results++;
     }
   }
-  assert.equal(results,14);
+  assert.equal(results,27);
 });

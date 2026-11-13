@@ -1,0 +1,14 @@
+/* Explorador aberto: entrada de expressão, conclusões e construção geométrica. */
+.explorer{margin:4rem 0;padding:2rem;border:1px solid var(--line,#d3d9e3);border-radius:16px;scroll-margin-top:2rem}
+.explorer h2{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:.6rem 0 1rem}
+.explorer-form{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.8rem;align-items:center;margin:1.5rem 0}
+.explorer input:not([type=range]),.explorer select{min-width:0;width:100%;padding:.8rem;border:1px solid #d3d9e3;border-radius:6px;background:white;color:#172033;font:inherit}
+.explorer input[name=expression]{font-family:'JetBrains Mono',monospace}
+.explorer-form select{grid-column:2/4}
+.explorer button{padding:.7rem 1rem;border:1px solid #d3d9e3;border-radius:6px;background:white;color:#3b3fd8;font:inherit;cursor:pointer}
+.explorer button:hover{background:#e9eafd}.explorer button[type=submit]{background:#3b3fd8;color:white}
+.explorer-examples{display:flex;flex-wrap:wrap;gap:.5rem}.explorer-error{color:#a1231b;min-height:1.5em}
+.explorer-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.explorer-domain{grid-column:1/-1}
+.explorer-result{border:1px solid #d3d9e3;border-radius:8px;padding:1rem;overflow-wrap:anywhere}.explorer-result h3{margin:0;font-size:1rem;color:#566079}.explorer-result p{margin:.6rem 0 0}.explorer-value{font-weight:700;color:#172033}
+.explorer-visual{display:grid;grid-template-columns:minmax(180px,1fr) 2fr;gap:1.5rem;align-items:center;margin-top:2rem}.explorer-visual svg{width:100%;height:auto;font:17px 'JetBrains Mono',monospace}.explorer-settings{display:grid;gap:.7rem}.explorer-settings input{width:100%;accent-color:#3b3fd8}.explorer-settings output{float:right;font-family:monospace}.explorer .reading{padding:1rem;background:#e9eafd;border-radius:6px}
+@media(max-width:700px){.explorer{padding:1rem}.explorer-form{grid-template-columns:auto minmax(0,1fr)}.explorer-form button{grid-column:1/-1}.explorer-form select{grid-column:2}.explorer-results,.explorer-visual{grid-template-columns:1fr}.explorer-visual{gap:.5rem}}

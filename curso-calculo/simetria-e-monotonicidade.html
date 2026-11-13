@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simetria e monotonicidade · Cálculo</title><meta name="description" content="Paridade, períodos, monotonicidade e demonstração da proposição de linearidade com construções interativas.">
+<link rel="stylesheet" href="assets/course.css?v=5"><link rel="stylesheet" href="assets/explorer.css?v=5"><script defer src="assets/math.js?v=5"></script><script defer src="assets/functions.js?v=5"></script><script defer src="assets/course.js?v=5"></script><script defer src="assets/explorer-math.js?v=5"></script><script defer src="assets/explorer.js?v=5"></script></head>
+<body><a class="skip" href="#paridade">Pular para a aula</a><main class="wrap">
+<nav class="topbar" aria-label="Principal"><a class="brand" href="index.html">Cálculo · Explicações visuais</a><span>Aula 04</span></nav>
+<header class="hero"><div class="eyebrow">Capítulo 1 · Seção 1.2 · pp. 29–32</div><h1>Simetria e monotonicidade</h1>
+<p class="lede">Simetrias relacionam valores em pontos diferentes. A monotonicidade relaciona a ordem das entradas à das saídas. Combinada com uma homogeneidade por inteiros, ela determina uma função inteira a partir de um único valor.</p>
+<p class="intro-note">A proposição final usa a densidade dos racionais, demonstrada na <a href="completude-e-aproximacao.html#densidade">aula 02</a>. A figura apresenta um ponto hipotético fora da reta e constrói o racional que o torna incompatível com as hipóteses.</p></header>
+<p class="intro-note"><a href="#explorador">Experimentar uma função no explorador →</a></p>
+
+<section class="lesson" id="paridade" data-result="paridade-e-simetria"><div class="text"><span class="num">Passo 1 · Definição 1.2.22</span><h2>Refletir um ponto do gráfico</h2>
+<p>Um conjunto A ⊂ ℝ é simétrico em relação a zero quando x ∈ A implica −x ∈ A. Para f : A → ℝ com esse domínio, dizemos que f é <strong>par</strong> se f(−x) = f(x) para todo x ∈ A, e <strong>ímpar</strong> se f(−x) = −f(x) para todo x ∈ A.</p>
+<div class="statement"><h3>Equivalência geométrica</h3><p>f é par se, e somente se, seu gráfico é invariante pela reflexão (x,y) ↦ (−x,y). f é ímpar se, e somente se, seu gráfico é invariante pela simetria central (x,y) ↦ (−x,−y).</p></div>
+<p>x² é par, x³ é ímpar e x² + x não é nenhuma das duas. A função nula é simultaneamente par e ímpar. Se 0 ∈ A e f é ímpar, f(0) = −f(0), de modo que f(0) = 0.</p><p class="reference">Livro: definição 1.2.22 e exemplo 1.2.23, pp. 29–30.</p></div>
+<figure class="bench" id="lab-symmetry" data-lab="s-parity" data-proof="proof-symmetry"><figcaption>Compare o ponto transformado com o valor efetivo da função em −x. A igualdade deve valer para todas as entradas.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-symmetry">
+<li>Se f é par, a reflexão de qualquer (x,f(x)) é (−x,f(x)) = (−x,f(−x)), que pertence ao gráfico. Como a reflexão aplicada duas vezes é a identidade, o gráfico é invariante. Reciprocamente, se o gráfico é invariante, (−x,f(x)) pertence a ele; a unicidade da saída em −x dá f(−x) = f(x).</li>
+<li>Se f é ímpar, a simetria central leva (x,f(x)) a (−x,−f(x)) = (−x,f(−x)), também no gráfico. A transformação é sua própria inversa. Reciprocamente, a invariância põe (−x,−f(x)) no gráfico e a unicidade da saída dá f(−x) = −f(x).</li>
+</ol></div></section>
+
+<section class="lesson" id="periodos" data-result="multiplos-de-periodos"><div class="text"><span class="num">Passo 2 · Definição 1.2.24</span><h2>Repetir exige preservar o domínio</h2>
+<p>Seja f : A → ℝ. Um número T &gt; 0 é um <strong>período</strong> quando, para todo x ∈ A, temos x ± T ∈ A e f(x ± T) = f(x). A condição sobre o domínio faz parte da definição.</p>
+<div class="statement"><h3>Múltiplos inteiros de um período</h3><p>Se T é período, então, para todo inteiro k e todo x ∈ A, x + kT ∈ A e f(x + kT) = f(x). Em particular, mT é período para todo inteiro m ≥ 1.</p></div>
+<p>A bancada usa a parte fracionária {x} = x − ⌊x⌋, em todo ℝ. A igualdade {x + 1} = {x} será justificada no próximo resultado.</p><p class="reference">Livro: definições 1.2.24–1.2.25 e exemplo 1.2.26, p. 30.</p></div>
+<figure class="bench" id="lab-period-multiples" data-lab="s-multiples" data-proof="proof-period-multiples"><figcaption>Os saltos preservam a altura do ponto. Avance para passar de um salto à indução e aos deslocamentos negativos.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-period-multiples">
+<li>Para k = 0, a afirmação é x ∈ A e f(x) = f(x). Para k = 1, ela é parte da hipótese de periodicidade.</li>
+<li>Suponha x + kT ∈ A e f(x + kT) = f(x), com k ≥ 0. Aplicando a hipótese no ponto x + kT, obtemos x + (k + 1)T ∈ A e f(x + (k + 1)T) = f(x + kT) = f(x). A indução prova todos os k ≥ 0.</li>
+<li>A mesma indução, usando −T em cada passo, fornece x − jT ∈ A e f(x − jT) = f(x) para j ≥ 0. Portanto a afirmação vale para todo k ∈ ℤ. Fixado m ≥ 1, os casos k = ±m verificam as duas condições para mT ser período.</li>
+</ol></div></section>
+
+<section class="lesson" id="reescalonamento" data-result="reescalonamento-periodico"><div class="text"><span class="num">Exemplo 1.2.26(1)</span><h2>Mudar a escala da entrada</h2>
+<div class="statement"><h3>Um período após reescalonar</h3><p>Se f : A → ℝ tem período T, p ∈ ℤ ∖ {0} e q é um inteiro positivo, defina g(x) = f((p/q)x) no domínio E = {x ∈ ℝ : (p/q)x ∈ A}. Então qT é um período de g.</p></div>
+<p>O resultado fornece um período; não afirma que ele seja mínimo. A bancada usa f(x) = {x} e T = 1.</p><p class="reference">Livro: exemplo 1.2.26(1), p. 30.</p></div>
+<figure class="bench" id="lab-period-rescale" data-lab="s-rescale" data-proof="proof-period-rescale"><figcaption>A mudança x ↦ x + qT torna-se (p/q)x ↦ (p/q)x + pT. O inteiro p pode ser negativo.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-period-rescale">
+<li>Se x ∈ E, então u = (p/q)x pertence a A. Pelo resultado sobre múltiplos inteiros, u ± pT ∈ A e f(u ± pT) = f(u).</li>
+<li>Como (p/q)(x ± qT) = u ± pT, os pontos x ± qT pertencem a E. Assim a translação preserva o domínio nos dois sentidos.</li>
+<li>Também g(x ± qT) = f(u ± pT) = f(u) = g(x). Como qT &gt; 0, essas são exatamente as condições para qT ser um período de g.</li>
+</ol></div></section>
+
+<section class="lesson" id="periodo-minimo" data-result="existencia-de-periodo-minimo"><div class="text"><span class="num">Passo 3 · Exemplo 1.2.26</span><h2>Periódica não implica período mínimo</h2>
+<p>O <strong>período mínimo</strong>, quando existe, é o menor elemento do conjunto dos períodos positivos. Não se deve pressupor que esse conjunto tenha mínimo.</p>
+<div class="statement"><h3>Três comportamentos</h3><p>Em ℝ, a parte fracionária tem período mínimo 1. Uma função constante tem todo T &gt; 0 como período e nenhum mínimo. A função χ<sub>ℚ</sub>, igual a 1 nos racionais e a 0 nos irracionais, tem exatamente os racionais positivos como períodos e também não tem mínimo.</p></div>
+<p>χ<sub>ℚ</sub> não pode ser desenhada classificando números decimais da tela como racionais ou irracionais. A bancada utiliza entradas declaradas simbolicamente, como 1/q e √2, e argumentos sobre elas.</p><p class="reference">Livro: definição 1.2.25 e exemplo 1.2.26, p. 30.</p></div>
+<figure class="bench" id="lab-minimal-period" data-lab="s-periods" data-proof="proof-minimal-period"><figcaption>Escolha a família e o deslocamento simbólico. A classificação vem da prova; os pontos mostram testemunhas das igualdades ou falhas.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-minimal-period">
+<li>Da definição de piso, ⌊x⌋ ≤ x &lt; ⌊x⌋ + 1. Somar um inteiro k mostra ⌊x + k⌋ = ⌊x⌋ + k; logo {x + k} = {x}. Assim 1 é período. Se T &gt; 0 é período, {T} = {0} = 0, portanto T é inteiro. Os períodos positivos são exatamente os inteiros positivos, cujo mínimo é 1.</li>
+<li>Se f(x) = c em todo ℝ, o domínio é preservado por qualquer translação e f(x ± T) = c = f(x) para todo T &gt; 0. Como T/2 também é período e 0 &lt; T/2 &lt; T, não há mínimo.</li>
+<li>Para T racional, x ± T é racional se, e somente se, x é racional; portanto χ<sub>ℚ</sub>(x ± T) = χ<sub>ℚ</sub>(x). Se T &gt; 0 é irracional, χ<sub>ℚ</sub>(T) = 0 ≠ 1 = χ<sub>ℚ</sub>(0), então T não é período. Todo período T racional positivo admite o período menor T/2, logo não há mínimo.</li>
+</ol></div></section>
+
+<section class="lesson" id="monotonicidade" data-result="monotonicidade-e-inversa"><div class="text"><span class="num">Passo 4 · Definição 1.2.27</span><h2>A ordem transportada pela função</h2>
+<p>Para f : A → ℝ, e quaisquer x₁,x₂ ∈ A com x₁ &lt; x₂, dizemos que f é <strong>crescente</strong> se f(x₁) ≤ f(x₂), e <strong>estritamente crescente</strong> se f(x₁) &lt; f(x₂). As versões decrescentes usam ≥ e &gt;, respectivamente. Aqui “crescente” admite igualdade, como no livro.</p>
+<p>Uma constante é crescente e decrescente, mas não estritamente monótona num domínio com dois pontos. x² não é monótona em ℝ, mas é estritamente crescente em ℝ₊. O piso é crescente e não é estritamente crescente.</p>
+<div class="statement"><h3>Injetividade e ordem da inversa</h3><p>Toda função estritamente monótona é injetora. Considerada como bijeção de A sobre f(A), sua inversa é estritamente crescente quando f é estritamente crescente, e estritamente decrescente quando f é estritamente decrescente.</p></div>
+<p class="reference">Livro: monotonicidade, p. 31. O resultado sobre a inversa explicita uma consequência das definições e da aula anterior.</p></div>
+<figure class="bench" id="lab-monotonicity" data-lab="s-monotone" data-proof="proof-monotonicity"><figcaption>Compare duas entradas ordenadas. Nos passos da prova, uma reta de inclinação não nula exemplifica a hipótese de monotonicidade estrita.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-monotonicity">
+<li>Se x₁ ≠ x₂, uma das entradas é menor. A monotonicidade estrita, crescente ou decrescente, impõe saídas diferentes. Portanto f é injetora. Como A → f(A) é sobrejetora por definição, é bijetora e tem inversa h : f(A) → A.</li>
+<li>Suponha f estritamente crescente. Dados y₁ &lt; y₂ em f(A), ponha xᵢ = h(yᵢ). Se x₁ = x₂, então y₁ = y₂, absurdo. Se x₁ &gt; x₂, então y₁ = f(x₁) &gt; f(x₂) = y₂, absurdo. Resta h(y₁) &lt; h(y₂).</li>
+<li>Suponha f estritamente decrescente. Com a mesma notação, x₁ = x₂ é impossível. Se x₁ &lt; x₂, então y₁ = f(x₁) &gt; f(x₂) = y₂, absurdo. Resta h(y₁) &gt; h(y₂), que é a monotonicidade estritamente decrescente da inversa.</li>
+</ol></div></section>
+
+<section class="lesson" id="linearidade" data-result="proposicao-de-linearidade"><div class="text"><span class="num">Passo 5 · Proposição 1.2.28</span><h2>Dos inteiros aos reais</h2>
+<div class="statement"><h3>Monotonicidade e homogeneidade</h3><p>Se f : ℝ → ℝ é estritamente crescente e satisfaz f(nx) = nf(x) para todo x ∈ ℝ e todo n ∈ ℤ, então existe c &gt; 0 tal que f(x) = cx para todo x ∈ ℝ. Necessariamente c = f(1).</p></div>
+<p>A hipótese não é a aditividade f(x + y) = f(x) + f(y). Primeiro a homogeneidade determina f nos racionais. Depois, a ordem e a densidade de ℚ impedem qualquer desvio da reta em uma entrada real.</p>
+<p>O ponto destacado fora da reta é uma <em>suposição para obter contradição</em>. Não representa uma função que satisfaça as duas hipóteses. A escolha do racional q é certificada por comparações exatas entre inteiros e √2; as posições na tela são aproximadas.</p><p class="reference">Livro: proposição 1.2.28 e demonstração, pp. 31–32.</p></div>
+<figure class="bench" id="lab-linearity" data-lab="s-linearity" data-proof="proof-linearity"><figcaption>Altere c, a entrada irracional x e o desvio hipotético δ = f(x) − cx. Avance para acompanhar os dois casos de contradição.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-linearity">
+<li>A hipótese com n = 0 dá f(0) = 0. Defina c = f(1). Como 0 &lt; 1 e f é estritamente crescente, 0 = f(0) &lt; f(1) = c.</li>
+<li>Dados p ∈ ℤ e n ∈ ℕ com n ≥ 1, temos nf(p/n) = f(p) = pf(1) = pc. Dividindo por n, f(p/n) = c(p/n). Portanto f(q) = cq para todo q ∈ ℚ.</li>
+<li>Fixe x ∈ ℝ. Se f(x) &lt; cx, então f(x)/c &lt; x, pois c &gt; 0. Pela densidade de ℚ, existe q racional com f(x)/c &lt; q &lt; x. Por um lado, q &lt; x implica f(q) &lt; f(x). Por outro, f(q) = cq &gt; f(x), contradição.</li>
+<li>Se f(x) &gt; cx, escolha q racional com x &lt; q &lt; f(x)/c. A monotonicidade dá f(x) &lt; f(q), mas f(q) = cq &lt; f(x), novamente uma contradição.</li>
+<li>Os dois desvios são impossíveis; resta f(x) = cx. Como x foi arbitrário, a igualdade vale em todo ℝ. O coeficiente é positivo e único, pois avaliar em x = 1 obriga c = f(1).</li>
+</ol></div></section>
+
+<section class="lesson" id="semirreta" data-result="linearidade-na-semirreta"><div class="text"><span class="num">Passo 6 · Corolário 1.2.29</span><h2>Quando só temos entradas não negativas</h2>
+<div class="statement"><h3>Versão em ℝ₊ = [0,+∞)</h3><p>Se f : ℝ₊ → ℝ é estritamente crescente e f(nx) = nf(x) para todo x ≥ 0 e todo n ∈ ℕ = {0,1,2,…}, então existe c &gt; 0 tal que f(x) = cx para todo x ≥ 0.</p></div>
+<p>Para aplicar a proposição anterior, estendemos f ao eixo negativo de maneira ímpar. É preciso verificar que essa extensão conserva as duas hipóteses.</p><p class="reference">Livro: corolário 1.2.29, p. 32.</p></div>
+<figure class="bench" id="lab-positive-linearity" data-lab="s-positive" data-proof="proof-positive-linearity"><figcaption>A curva x² permite ver por que monotonicidade sozinha não basta. Ao avançar na prova, a bancada usa um modelo que satisfaz ambas as hipóteses.</figcaption></figure>
+<div class="proof"><h3>Demonstração</h3><ol id="proof-positive-linearity">
+<li>Como antes, f(0) = 0 e f(t) &gt; 0 para t &gt; 0. Defina g : ℝ → ℝ por g(x) = f(x) se x ≥ 0, e g(x) = −f(−x) se x &lt; 0. As fórmulas concordam em zero e g é ímpar.</li>
+<li>Se x₁ &lt; x₂ são não negativos, g(x₁) &lt; g(x₂) pela hipótese. Se x₁ &lt; x₂ ≤ 0, então −x₁ &gt; −x₂ ≥ 0; daí f(−x₁) &gt; f(−x₂), e negar dá g(x₁) &lt; g(x₂). Se x₁ &lt; 0 &lt; x₂, temos g(x₁) &lt; 0 &lt; g(x₂). Portanto g é estritamente crescente em ℝ.</li>
+<li>Para n ≥ 0 e x ≥ 0, g(nx) = ng(x) pela hipótese sobre f. Para x &lt; 0 e n ≥ 1, g(nx) = −f(n(−x)) = −nf(−x) = ng(x); o caso n = 0 segue de g(0) = 0. Se n = −m &lt; 0, a imparidade e o caso m &gt; 0 dão g(nx) = g(−mx) = −g(mx) = −mg(x) = ng(x).</li>
+<li>A proposição 1.2.28 aplica-se a g e fornece g(x) = cx em ℝ, com c = g(1) = f(1) &gt; 0. Restringindo a x ≥ 0, obtemos f(x) = cx.</li>
+</ol></div></section>
+
+<section class="lesson" id="setores" data-result="area-orientada-de-setores"><div class="text"><span class="num">Passo 7 · Exemplo 1.2.30</span><h2>Uma aplicação: área e ângulo</h2>
+<p>Fixe um círculo de raio r &gt; 0 e meça θ em radianos, com uma volta completa igual a 2π. Considere a área <strong>orientada</strong> S(θ): ângulos negativos têm área negativa, e voltas sucessivas contam a área com multiplicidade.</p>
+<div class="statement"><h3>Consequência das hipóteses de área</h3><p>Admita S : ℝ → ℝ estritamente crescente, S(nθ) = nS(θ) para todo θ ∈ ℝ e n ∈ ℤ, e S(2π) = πr². Então S(θ) = r²θ/2 para todo θ ∈ ℝ.</p></div>
+<p>Essas propriedades de S são hipóteses geométricas admitidas neste exemplo, como no livro. A figura ilustra suas consequências; não estabelece uma teoria de área nem demonstra essas hipóteses.</p><p class="reference">Livro: exemplo 1.2.30, p. 32.</p></div>
+<figure class="bench" id="lab-sector-area" data-lab="s-sector" data-proof="proof-sector-area"><figcaption>A região sombreada mostra a parte de uma volta. O contador registra voltas completas e o sinal, necessários para interpretar a área orientada.</figcaption></figure>
+<div class="proof"><h3>Demonstração condicional</h3><ol id="proof-sector-area">
+<li>Pela proposição 1.2.28 aplicada a S, existe k &gt; 0 tal que S(θ) = kθ para todo θ ∈ ℝ.</li>
+<li>Em θ = 2π, as duas expressões para a área dão k·2π = πr². Como 2π ≠ 0, segue k = r²/2.</li>
+<li>Substituindo esse valor, S(θ) = r²θ/2 para todo θ ∈ ℝ, inclusive θ &lt; 0 e ângulos com mais de uma volta. A interpretação nesses casos é orientada e conta multiplicidade.</li>
+</ol></div>
+<div class="exercises"><details><summary>Exercícios · Hipóteses que fazem diferença</summary><div><ol class="exercise-list">
+<li>Uma função pode ser par e ímpar ao mesmo tempo?<details><summary>Ver resolução</summary><div class="answer">Sim: a função nula. Reciprocamente, se ambas as identidades valem, f(x) = f(−x) = −f(x), então 2f(x) = 0 para todo x. Assim somente a função nula tem ambas as propriedades num mesmo domínio simétrico.</div></details></li>
+<li>Por que x² em ℝ₊ não satisfaz o corolário de linearidade?<details><summary>Ver resolução</summary><div class="answer">Embora seja estritamente crescente, f(2x) = 4x² e 2f(x) = 2x². Para x &gt; 0, essas expressões diferem. Falha a homogeneidade por inteiros.</div></details></li>
+<li>Calcule a área orientada para θ = −3π e raio r.<details><summary>Ver resolução</summary><div class="answer">S(−3π) = −3πr²/2: uma volta e meia no sentido negativo. O valor absoluto excede a área do disco porque as voltas contam com multiplicidade.</div></details></li>
+</ol></div></details></div></section>
+<section class="explorer" id="explorador" data-explorer aria-labelledby="explorer-title">
+<span class="num">Laboratório aberto</span><h2 id="explorer-title">Digite uma função. Investigue suas propriedades.</h2>
+<p>Escolha a expressão e o domínio. O explorador reconhece polinômios e famílias elementares, com justificativas algébricas. Expressões mais gerais também podem ser desenhadas, mas recebem “não determinado” nas propriedades que esta versão não consegue decidir.</p>
+<form class="explorer-form"><label for="explorer-expression">f(x) =</label><input id="explorer-expression" name="expression" value="x^2" spellcheck="false" autocomplete="off" maxlength="400" aria-describedby="explorer-syntax"><button type="submit">Analisar função →</button>
+<label for="explorer-domain">Domínio</label><select name="domain" id="explorer-domain"><option value="natural">Natural real</option><option value="positive">Natural ∩ [0,+∞)</option><option value="negative">Natural ∩ (−∞,0]</option><option value="sine">Natural ∩ [−π/2,π/2]</option><option value="cosine">Natural ∩ [0,π]</option><option value="tangent">Natural ∩ (−π/2,π/2)</option></select></form>
+<p id="explorer-syntax" class="reference">Use * para multiplicar, ^ para potências, ponto decimal e parênteses. Funções: sin (ou sen), cos, tan, exp, ln, sqrt, cbrt, abs e floor. Constantes: pi e e. Para raízes cúbicas reais negativas, use cbrt(x).</p>
+<div class="explorer-examples" aria-label="Exemplos"><button type="button" data-expression="x^2">x² em ℝ</button><button type="button" data-expression="x^2" data-domain="positive">x² em ℝ₊</button><button type="button" data-expression="sin(x)">sen(x)</button><button type="button" data-expression="sin(x)" data-domain="sine">Ramo do seno</button><button type="button" data-expression="exp(x)">exp(x)</button><button type="button" data-expression="1/x">1/x</button><button type="button" data-expression="sin(x^2)">Caso não determinado</button></div>
+<p class="explorer-error" data-error role="alert"></p><div class="explorer-results" data-results aria-live="polite"></div>
+<div class="explorer-visual"><div class="explorer-settings"><label for="explorer-view">Explicação visual</label><select id="explorer-view" name="view"><option value="graph">Gráfico</option><option value="parity">Paridade: refletir</option><option value="period">Periodicidade: transladar</option><option value="inverse">Inversa: trocar coordenadas</option><option value="monotonic">Monotonicidade: comparar entradas</option></select><label for="explorer-point">Entrada x <output data-point-value>1</output></label><input type="range" name="point" id="explorer-point" min="-4" max="4" step="0.25" value="1"><label for="explorer-zoom">Janela dos eixos <output data-zoom-value>±8</output></label><input type="range" id="explorer-zoom" name="zoom" min="2" max="12" step="1" value="8"></div><svg viewBox="0 0 560 390" role="img" aria-label="Gráfico da função e transformação selecionada" aria-describedby="explorer-reading"></svg></div>
+<p class="reading" id="explorer-reading" data-reading aria-live="polite"></p>
+<p class="reference">O gráfico usa amostragem numérica e pode omitir detalhes pequenos, valores fora da janela ou trechos perto de singularidades. A tangente é interrompida numericamente perto dos polos. As classificações acima vêm de regras simbólicas para famílias reconhecidas; coincidências visuais não são demonstrações. “Não determinado” não significa “não existe”.</p>
+</section>
+<nav class="lesson-nav" aria-label="Aulas"><a href="funcoes-e-inversas.html">← Funções e inversas</a><a href="index.html">Todas as aulas →</a></nav>
+<footer class="colophon"><p>Referência: capítulo 1 das fotos fornecidas por Gabriel, pp. 29–32. Explicações, exercícios e diagramas próprios. Os argumentos sobre gráficos, períodos e inversas foram explicitados.</p></footer>
+</main></body></html>

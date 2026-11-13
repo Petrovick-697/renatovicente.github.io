@@ -12,12 +12,12 @@ Preservar o nível de profundidade e formalismo da referência. Cada teorema ou 
 |---|---|---|---|
 | 01 — Ordem e distância | Ordem, intervalos, módulo, desigualdades triangular e reversa | 15–18 | Implementada; ver VERIFICACAO.md |
 | 02 — Completude e aproximação | Cotas, supremo, ínfimo, completude, irracionais, propriedade arquimediana, acumulação, densidade | 18–23 | Implementada; ver VERIFICACAO.md |
-| 03 — Funções e inversas | Domínio, contradomínio, imagem e imagem inversa; restrição, extensão, sequências, operações, gráficos, injetividade, sobrejetividade, composição e inversa | 24–29 | Planejada |
-| 04 — Simetria, periodicidade e monotonicidade | Paridade, períodos, monotonicidade; proposição de linearidade 1.2.28 e corolário 1.2.29; área de setor | 29–32 | Planejada |
+| 03 — Funções e inversas | Domínio, contradomínio, imagem e imagem inversa; restrição, extensão, sequências, operações, gráficos, injetividade, sobrejetividade, composição e inversa | 24–29 | Implementada; ver VERIFICACAO_03_04.md |
+| 04 — Simetria, periodicidade e monotonicidade | Paridade, períodos e reescalonamento, monotonicidade; proposição de linearidade 1.2.28 e corolário 1.2.29; área de setor | 29–32 | Implementada; inclui explorador de funções |
 | 05 — Trigonometria | Arcos, radianos, seno e cosseno, identidades, funções trigonométricas derivadas | 33–37 | Planejada |
 | 06 — Limitação e extremos de funções | Cotas e restrições, supremo e ínfimo, valores e pontos de máximo, gráficos e desigualdades com módulo | 37–40 | Planejada |
 
-As páginas 41–43 contêm a seção 1.3, com 28 exercícios, vários com subitens. Ainda não se produziu a lista integral de soluções. Os exercícios presentes nas duas primeiras aulas foram escritos para o curso.
+As páginas 41–43 contêm a seção 1.3, com 28 exercícios, vários com subitens. Ainda não se produziu a lista integral de soluções. Os exercícios presentes nas quatro aulas foram escritos para o curso.
 
 ## Correspondência entre resultados e interações entregues
 
@@ -37,8 +37,19 @@ As páginas 41–43 contêm a seção 1.3, com 28 exercícios, vários com subit
 | Acumulação, infinitude e exemplos | Defs. 1.1.20–1.1.22; Ex. 1.1.23, pp. 22–23 | completude-e-aproximacao.html#acumulacao |
 | Densidade dos racionais | Cor. 1.1.25, p. 23 | completude-e-aproximacao.html#densidade |
 | Densidade dos irracionais e acumulação de ℚ em todos os reais | Obs. 1.1.24 e 1.1.27, p. 23; prova por translação | completude-e-aproximacao.html#densidade-irracional |
+| Critérios gráficos | Defs. 1.2.13, 1.2.16 e observações, pp. 26–27 | funcoes-e-inversas.html#graficos |
+| Domínio máximo e associatividade da composição | Def. 1.2.18 e discussão, pp. 27–28 | funcoes-e-inversas.html#composicao e #associatividade |
+| Inversa, bijeção, unicidade e reflexão | Def. 1.2.20 e Ex. 1.2.21, pp. 28–29 | funcoes-e-inversas.html#inversa e #reflexao |
+| Paridade e simetria do gráfico | Def. 1.2.22, pp. 29–30 | simetria-e-monotonicidade.html#paridade |
+| Múltiplos de períodos e reescalonamento | Defs. 1.2.24–25 e Ex. 1.2.26(1), p. 30 | simetria-e-monotonicidade.html#periodos e #reescalonamento |
+| Período mínimo: existência e contraexemplos | Ex. 1.2.26, pp. 30–31 | simetria-e-monotonicidade.html#periodo-minimo |
+| Monotonicidade estrita e inversa | Def. 1.2.27, p. 31; consequência explicitada | simetria-e-monotonicidade.html#monotonicidade |
+| Linearidade e extensão ímpar | Prop. 1.2.28 e Cor. 1.2.29, pp. 31–32 | simetria-e-monotonicidade.html#linearidade e #semirreta |
+| Área orientada: consequência condicional | Ex. 1.2.30, p. 32 | simetria-e-monotonicidade.html#setores |
 
 As propriedades da ordem são admitidas como estrutura dos reais, conforme o início da referência. O axioma da completude é identificado como axioma; sua figura acompanha uma consequência demonstrada, não uma suposta prova do axioma.
+
+O explorador aberto em `simetria-e-monotonicidade.html#explorador` foi solicitado por Gabriel durante a produção das aulas 03–04. Ele aceita expressões de uma linguagem delimitada, desenha aproximações e aplica regras simbólicas conservadoras; não é um decisor geral de propriedades de funções. Domínios vazios ou unitários e casos não cobertos são identificados sem inventar conclusões.
 
 ## Pontos de atenção para as aulas seguintes
 
