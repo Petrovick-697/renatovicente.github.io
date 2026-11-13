@@ -7,6 +7,9 @@
 - Referência recebida: 29 fotos, capítulo 1, “Fatos Básicos”, pp. 15–43, cabeçalho “Cálculo em uma Variável Real”. Autor e edição ainda não foram informados. Não os inferir.
 - Fotos e OCR ficam fora do material distribuível. Escrever explicações, figuras e exercícios próprios e registrar a correspondência com a referência em docs/.
 - Preservar o padrão visual observado em vxplain.io: fundo branco, tipografia legível, texto junto da bancada, controles acessíveis, exercícios com resolução.
+- Escrever as expressões matemáticas em LaTeX, inclusive nas caixas, demonstrações, legendas e resultados das interações. Usar o KaTeX e as fontes incluídos localmente; não depender de CDN para renderizar matemática.
+- Referências a teoremas, proposições e resultados devem levar ao enunciado correspondente por links que abrem em nova aba (`target="_blank"`, com `rel="noopener noreferrer"`).
+- Evitar rótulos sobre curvas ou sobre outros rótulos. Preferir legendas externas, janelas ajustadas ao exemplo e gráficos com área útil legível. Verificar sobreposições além de verificar se há recorte.
 - A implementação é HTML/CSS/JavaScript sem compilação nem dependências obrigatórias. Deve funcionar por arquivo local e por servidor estático.
 - Separar os cálculos em assets/math.js. Validar as construções de testemunhas por desigualdades exatas e revisar as provas separadamente.
 - Antes de entregar, executar os testes, verificar o navegador em computador e celular e atualizar docs/VERIFICACAO.md com o que foi realmente verificado.

@@ -22,6 +22,8 @@ node --test tests/*.test.cjs
 
 Não é necessário instalar pacotes. Os testes conferem as construções usadas nas interações; as demonstrações gerais passam por revisão matemática própria.
 
+As fórmulas são escritas em LaTeX e renderizadas pelo KaTeX 0.19.1, distribuído com suas fontes e licença em `assets/vendor/katex/`. A renderização matemática funciona sem conexão. As referências aos resultados abrem o enunciado em nova aba.
+
 ## Organização
 
 - `index.html`: entrada das aulas disponíveis.

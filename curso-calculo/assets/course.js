@@ -9,6 +9,7 @@
   const fraction = (p,q) => q===1 ? String(p) : `${p}/${q}`;
   const range = (key,label,min,max,step,value,display) => ({key,label,min,max,step,value,display});
   const select = (key,label,options,value) => ({key,label,options,value});
+  let plotLegend=[];
   const config = {
     order: {label:'Efeito de multiplicar uma desigualdade', controls:[range('a','a',-3,1,.25,-2),range('gap','b − a',.5,5,.5,4),range('c','c',-2,2,.25,-1)]},
     interval: {label:'Extremos de um intervalo e teste de pertinência', controls:[range('center','Centro',-2,2,.25,0),range('half','Meia largura',0,3,.25,2),select('ends','Extremos',[['open','(a, b)'],['closed','[a, b]'],['left','[a, b)'],['right','(a, b]']],'open'),range('x','Ponto x',-5,5,.25,1)]},
@@ -53,6 +54,7 @@
   }
   function result(svg,stats,reading) { return {svg,stats,reading}; }
   function draw(kind,s) {
+    plotLegend=[];
     let svg='';
     if(kind==='order') {
       const {a,gap,c}=s,b=a+gap,ca=c*a,cb=c*b;
@@ -308,7 +310,10 @@
       return result(svg,[['Intervalo (a; b)',`(${fmt(a,7)}; ${fmt(b,7)})`],['Fração construída',`${w.k}/${w.n}`],['Número no intervalo',shift?`${w.k}/${w.n} + √2`:`${w.k}/${w.n}`],['Aproximação','≈ '+fmt(q+shift,8)]],stage);
     }
     const extra=window.CalculoLessons?.drawers?.[kind];
-    if(extra) return extra(s,{text,segment,point,axis,intervalDrawing,result,fmt,escape,ink,muted,blue,purple,red,green,line,soft});
+    if(extra) {
+      const value=extra(s,{text,segment,point,axis,intervalDrawing,result,fmt,escape,ink,muted,blue,purple,red,green,line,soft,legend:plotLegend});
+      value.legend=plotLegend;return value;
+    }
     throw new Error(`Bancada desconhecida: ${kind}`);
   }
   function mount(figure) {
@@ -318,7 +323,7 @@
     const steps=proof?[...proof.children]:[],caption=figure.querySelector('figcaption');
     caption.className='diagram-caption';
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 560 280');svg.setAttribute('role','img');svg.id=`${figure.id}-diagram`;
+    svg.setAttribute('role','img');svg.id=`${figure.id}-diagram`;
     svg.setAttribute('aria-label',cfg.label);
     const controls=document.createElement('div');controls.className='controls';
     for(const item of cfg.controls) {
@@ -326,10 +331,12 @@
       const row=document.createElement('div');row.className=`control${item.options?' select':''}`;
       const label=document.createElement('label'),id=`${figure.id}-${item.key}`;label.htmlFor=id;label.textContent=item.label;
       const input=document.createElement(item.options?'select':'input');input.id=id;input.dataset.key=item.key;
+      input.setAttribute('aria-label',item.label);
       input.setAttribute('aria-controls',svg.id);
-      if(item.options) for(const [value,name] of item.options) {const option=document.createElement('option');option.value=value;option.textContent=name;input.append(option);}
+      if(item.options) for(const [value,name] of item.options) {const option=document.createElement('option');option.value=value;option.textContent=window.CourseMath?.choiceName(name)||name;input.append(option);}
       else {input.type='range';input.min=item.min;input.max=item.max;input.step=item.step;}
       input.value=item.value;row.append(label,input);
+      if(item.options){const preview=document.createElement('div');preview.className='selected-formula';preview.dataset.preview=item.key;row.append(preview);}
       if(!item.options) {const output=document.createElement('output');output.htmlFor=id;output.dataset.output=item.key;row.append(output);}
       input.addEventListener('input',()=>{
         state[item.key]=item.options?input.value:Number(input.value);
@@ -342,6 +349,7 @@
       controls.append(row);
     }
     const stats=document.createElement('div');stats.className='stats';
+    const legend=document.createElement('div');legend.className='plot-legend';
     const reading=document.createElement('div');reading.className='reading';reading.id=`figure-${figure.id}-reading`;
     reading.setAttribute('aria-live','polite');reading.setAttribute('aria-atomic','true');
     svg.setAttribute('aria-describedby',reading.id);
@@ -367,21 +375,30 @@
       }
       proofControl.append(position,back,next);
     }
-    figure.replaceChildren(svg,controls,stats,reading,...(steps.length?[proofControl]:[]),caption);
+    figure.replaceChildren(svg,legend,controls,stats,reading,...(steps.length?[proofControl]:[]),caption);
     function render() {
       cfg.normalize?.(state);
       for(const item of cfg.controls) {
         const input=controls.querySelector(`[data-key="${item.key}"]`);
         if(typeof item.max==='function') input.max=item.max(state);
         input.value=state[item.key];
-        if(item.options) continue;
+        if(item.options){const preview=controls.querySelector(`[data-preview="${item.key}"]`);const value=item.options.find(([key])=>key===state[item.key])?.[1]||'';preview.hidden=!window.CourseMath?.mark(value).includes('\\(');if(window.CourseMath&&!preview.hidden)window.CourseMath.legacy(preview,value);continue;}
         const output=controls.querySelector(`[data-output="${item.key}"]`);
         output.textContent=item.display?item.display(state[item.key],state):fmt(state[item.key]);
       }
       const r=draw(kind,state);
+      svg.setAttribute('viewBox',typeof cfg.viewBox==='function'?cfg.viewBox(state):cfg.viewBox||'0 0 560 280');
       svg.innerHTML=`<desc>${escape(r.reading)}</desc>${r.svg}`;
+      if(window.CourseMath)r.legend=[...(r.legend||[]),...window.CourseMath.svgLabels(svg)];
       stats.replaceChildren(...r.stats.map(([label,value])=>{const cell=document.createElement('div');cell.className='stat';const name=document.createElement('span'),number=document.createElement('b');name.textContent=label;number.textContent=value;cell.append(name,number);return cell;}));
       reading.textContent=r.reading;
+      legend.replaceChildren(...(r.legend||[]).map(item=>{const label=document.createElement('span');label.className='legend-item';label.style.setProperty('--legend-color',item.color);window.CourseMath?.legacy(label,item.label);return label;}));
+      if(window.CourseMath){
+        for(const label of controls.querySelectorAll('label'))if(!label.querySelector('.katex'))window.CourseMath.legacy(label,label.textContent);
+        window.CourseMath.legacy(reading,r.reading);
+        for(const cell of stats.querySelectorAll('.stat'))for(const child of cell.children)window.CourseMath.legacy(child,child.textContent);
+        for(const output of controls.querySelectorAll('output'))window.CourseMath.legacy(output,output.textContent);
+      }
       if(steps.length) {
         steps.forEach((step,j)=>{step.classList.toggle('active',j===state.step);if(j===state.step) step.setAttribute('aria-current','step');else step.removeAttribute('aria-current');});
         position.textContent=`Demonstração · passo ${state.step+1} de ${steps.length}`;
@@ -389,6 +406,7 @@
       }
     }
     render();
+    document.fonts?.ready.then(render);
   }
   document.querySelectorAll('[data-lab]').forEach(mount);
 })();

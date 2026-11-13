@@ -9,6 +9,7 @@
 .explorer button:hover{background:#e9eafd}.explorer button[type=submit]{background:#3b3fd8;color:white}
 .explorer-examples{display:flex;flex-wrap:wrap;gap:.5rem}.explorer-error{color:#a1231b;min-height:1.5em}
 .explorer-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.explorer-domain{grid-column:1/-1}
+.inverse-equation,.expression-preview{overflow-x:auto;font-size:1.15rem}.expression-preview{margin:1rem 0;padding:1rem;background:#f3f5f9;border-radius:8px}.explorer-result{line-height:1.75}
 .explorer-result{border:1px solid #d3d9e3;border-radius:8px;padding:1rem;overflow-wrap:anywhere}.explorer-result h3{margin:0;font-size:1rem;color:#566079}.explorer-result p{margin:.6rem 0 0}.explorer-value{font-weight:700;color:#172033}
 .explorer-visual{display:grid;grid-template-columns:minmax(180px,1fr) 2fr;gap:1.5rem;align-items:center;margin-top:2rem}.explorer-visual svg{width:100%;height:auto;font:17px 'JetBrains Mono',monospace}.explorer-settings{display:grid;gap:.7rem}.explorer-settings input{width:100%;accent-color:#3b3fd8}.explorer-settings output{float:right;font-family:monospace}.explorer .reading{padding:1rem;background:#e9eafd;border-radius:6px}
 @media(max-width:700px){.explorer{padding:1rem}.explorer-form{grid-template-columns:auto minmax(0,1fr)}.explorer-form button{grid-column:1/-1}.explorer-form select{grid-column:2}.explorer-results,.explorer-visual{grid-template-columns:1fr}.explorer-visual{gap:.5rem}}

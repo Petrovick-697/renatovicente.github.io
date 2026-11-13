@@ -28,16 +28,17 @@
     's-positive':{label:'Extensão ímpar da função da semirreta',controls:[select('family','Modelo em ℝ₊',[['affine','f(x) = cx'],['square','f(x) = x² (falha homogeneidade)']],'affine'),range('c','c',.5,2,.5,1),range('x','x positivo',.25,2,.25,1),range('n','Inteiro n',-3,3,1,2)]},
     's-sector':{label:'Área orientada de um setor com multiplicidade',controls:[range('r','Raio r',.5,2,.25,1),range('theta','θ/π',-2,4,.25,1)]}
   });
-  function plot(H,name,xmin,xmax,ymin,ymax,equal=false) {
-    const left=equal?180:75,right=equal?380:510,top=30,bottom=230;
+  for(const kind of ['f-image','f-restriction','f-sequence','f-operation','f-graph','f-reflection','s-parity','s-multiples','s-rescale','s-periods','s-monotone','s-linearity','s-positive'])E.config[kind].viewBox='0 0 560 420';
+  E.config['s-periods'].viewBox=s=>s.family==='rational-indicator'?'0 0 560 280':'0 0 560 420';
+  function niceTicks(min,max){const raw=(max-min)/4,power=10**Math.floor(Math.log10(raw)),n=raw/power,step=(n<1.5?1:n<3?2:n<7?5:10)*power,out=[];for(let i=Math.ceil(min/step);i*step<=max+step*1e-8;i++)out.push(i*step);return out;}
+  function plot(H,name,xmin,xmax,ymin,ymax,equal=false,ticks={}) {
+    const left=equal?115:75,right=equal?445:515,top=30,bottom=360;
     const X=x=>left+(x-xmin)/(xmax-xmin)*(right-left),Y=y=>bottom-(y-ymin)/(ymax-ymin)*(bottom-top);
     const id='clip-'+name;
-    let svg=`<defs><clipPath id="${id}"><rect x="${left}" y="${top}" width="${right-left}" height="200"/></clipPath></defs>`;
-    for(let i=0;i<=4;i++) {
-      const x=xmin+(xmax-xmin)*i/4,y=ymin+(ymax-ymin)*i/4;
-      svg+=H.segment(X(x),top,X(x),bottom,H.line,1)+H.text(X(x),255,H.fmt(x,2));
-      svg+=H.segment(left,Y(y),right,Y(y),H.line,1)+H.text(left-6,Y(y)+5,H.fmt(y,2),H.muted,'end');
-    }
+    let svg=`<defs><clipPath id="${id}"><rect x="${left}" y="${top}" width="${right-left}" height="${bottom-top}"/></clipPath></defs>`;
+    const xticks=ticks.x||niceTicks(xmin,xmax),yticks=ticks.y||niceTicks(ymin,ymax);
+    for(const x of xticks)svg+=H.segment(X(x),top,X(x),bottom,H.line,1)+H.text(X(x),390,H.fmt(x,2));
+    for(const y of yticks)svg+=H.segment(left,Y(y),right,Y(y),H.line,1)+H.text(left-10,Y(y)+5,H.fmt(y,2),H.muted,'end');
     if(xmin<=0&&xmax>=0)svg+=H.segment(X(0),top,X(0),bottom,H.muted,1.5);
     if(ymin<=0&&ymax>=0)svg+=H.segment(left,Y(0),right,Y(0),H.muted,1.5);
     function curve(fn,color=H.blue,a=xmin,b=xmax) {
@@ -49,8 +50,8 @@
       }
       return `<path d="${d}" fill="none" stroke="${color}" stroke-width="3" clip-path="url(#${id})"/>`;
     }
-    const dot=(x,y,label,color=H.blue,closed=true)=>`<g clip-path="url(#${id})">${H.point(X(x),Y(y),'',color,closed)}</g>`+(label?H.text(Math.max(90,Math.min(470,X(x))),Y(y)>130?Y(y)-15:Y(y)+25,label,color):'');
-    return {svg,X,Y,curve,dot,id,left,right};
+    const dot=(x,y,label,color=H.blue,closed=true,radius=6)=>{if(label)H.legend.push({label:`${label}: (${H.fmt(x)}; ${H.fmt(y)})`,color});return `<g clip-path="url(#${id})"><circle cx="${X(x)}" cy="${Y(y)}" r="${radius}" fill="${closed?color:'white'}" stroke="${color}" stroke-width="2.5"/></g>`;};
+    return {svg,X,Y,curve,dot,id,left,right,top,bottom};
   }
   function arrow(H,x1,y1,x2,y2,color) {
     const a=Math.atan2(y2-y1,x2-x1),r=8;
@@ -105,10 +106,10 @@
   E.drawers['f-graph']=(s,H)=>{
     const circle=s.family==='circle',positive=s.family==='positive',horizontal=s.step>=2,p=plot(H,'graph',-2.5,2.5,-2.5,2.5,true);let svg=p.svg,count;
     if(circle) {
-      svg+=`<circle cx="${p.X(0)}" cy="${p.Y(0)}" r="40" fill="none" stroke="${H.blue}" stroke-width="3"/>`;
+      svg+=`<circle cx="${p.X(0)}" cy="${p.Y(0)}" r="${p.X(1)-p.X(0)}" fill="none" stroke="${H.blue}" stroke-width="3"/>`;
       count=Math.abs(s.value)>1?0:Math.abs(s.value)===1?1:2;
     } else {svg+=p.curve(x=>x*x,H.blue,positive?0:-2.5,2.5);count=horizontal?(s.value<0?0:s.value===0||positive?1:2):(positive&&s.value<0?0:1);}
-    svg+=horizontal?H.segment(180,p.Y(s.value),380,p.Y(s.value),H.red,2):H.segment(p.X(s.value),30,p.X(s.value),230,H.purple,2);
+    svg+=horizontal?H.segment(p.left,p.Y(s.value),p.right,p.Y(s.value),H.red,2):H.segment(p.X(s.value),p.top,p.X(s.value),p.bottom,H.purple,2);
     if(s.step===1)svg+=H.text(280,20,circle?'Duas saídas na mesma entrada':'Uma saída por entrada',H.ink);
     if(s.step===3)svg+=H.text(280,20,s.codomain==='real'?'Saídas negativas em B':'B = ℝ₊',H.ink);
     const global=circle?'Não é gráfico de função':positive?`Injetora; ${s.codomain==='positive'?'sobrejetora':'não sobrejetora'} em B`:`Não injetora; ${s.codomain==='positive'?'sobrejetora':'não sobrejetora'} em B`;
@@ -143,20 +144,20 @@
     return H.result(svg,[['Inversa',!valid?'Não existe':square?'√y em ℝ₊':`(y − ${H.fmt(s.b)})/${H.fmt(s.m)}`],['Coordenadas',`(${H.fmt(s.x)}; ${H.fmt(y)})`]],!valid?'m = 0: a função constante em ℝ não é bijetora de ℝ em ℝ.':s.step===0?'O ponto azul registra entrada e saída.':s.step===1?'O ponto verde troca as coordenadas; o gráfico verde é o da inversa.':'A reta y = x bissecta perpendicularmente o segmento entre os pontos. Os eixos têm a mesma unidade geométrica.');
   };
   E.drawers['s-parity']=(s,H)=>{
-    const f=x=>C.exampleValue(s.family,x),p=plot(H,'parity',-2.5,2.5,-9,9),y=f(s.x),transformed=s.step===0?y:-y;
-    const svg=p.svg+p.curve(f)+p.dot(s.x,y,'(x, f(x))',H.blue)+p.dot(-s.x,transformed,'Transformado',H.purple,false)+p.dot(-s.x,f(-s.x),'Valor em −x',H.green)+H.segment(p.X(s.x),p.Y(y),p.X(-s.x),p.Y(transformed),H.purple,2,'5 5');
+    const f=x=>C.exampleValue(s.family,x),bounds={square:[-1,5],cube:[-9,9],mixed:[-3,7],zero:[-1,1]}[s.family],p=plot(H,'parity',-2.25,2.25,...bounds),y=f(s.x),transformed=s.step===0?y:-y;
+    const svg=p.svg+p.curve(f)+p.dot(s.x,y,'(x, f(x))',H.blue)+p.dot(-s.x,transformed,'Transformado',H.purple,false,10)+p.dot(-s.x,f(-s.x),'Valor em −x',H.green,true,5)+H.segment(p.X(s.x),p.Y(y),p.X(-s.x),p.Y(transformed),H.purple,2,'5 5');
     const parity={square:'Par',cube:'Ímpar',mixed:'Nem par nem ímpar',zero:'Par e ímpar'}[s.family];
     return H.result(svg,[['Classificação global',parity],[s.step===0?'f(−x) e f(x)':'f(−x) e −f(x)',`${H.fmt(f(-s.x))} e ${H.fmt(transformed)}`]],s.step===0?'A reflexão no eixo vertical preserva a altura. A igualdade para todo x caracteriza uma função par.':'A simetria central troca os dois sinais. A igualdade para todo x caracteriza uma função ímpar. Um ponto coincidente isolado não decide a classificação global.');
   };
   E.drawers['s-multiples']=(s,H)=>{
-    const sign=s.step===2?-1:1,count=s.step===0?1:s.m,p=plot(H,'multiples',-6,6,-.25,1.25);let svg=p.svg;
-    for(let k=-6;k<6;k++)svg+=p.curve(x=>x-k,H.blue,k,k+1-.001)+p.dot(k,0,'',H.blue)+p.dot(k+1,1,'',H.blue,false);
-    for(let j=0;j<=count;j++) {const x=s.x+sign*j,y=C.fractionalPart(s.x);svg+=p.dot(x,y,j===count?'x + kT':'',j===count?H.purple:H.green);if(j)svg+=arrow(H,p.X(x-sign),p.Y(y)-20,p.X(x),p.Y(y)-20,H.purple);}
+    const sign=s.step===2?-1:1,count=s.step===0?1:s.m,destination=s.x+sign*count,min=Math.floor(Math.min(s.x,destination))-.2,max=Math.ceil(Math.max(s.x,destination))+.2,integers=Array.from({length:Math.ceil(max)-Math.floor(min)},(_,i)=>Math.floor(min)+i),p=plot(H,'multiples',min,max,-.12,1.12,false,{x:integers.filter(k=>k>=min),y:[0,.5,1]});let svg=p.svg;
+    for(const k of integers)svg+=p.curve(x=>x-k,H.blue,Math.max(k,min),Math.min(k+1-.001,max))+p.dot(k,0,'',H.blue)+p.dot(k+1,1,'',H.blue,false);
+    for(let j=0;j<=count;j++) {const x=s.x+sign*j,y=C.fractionalPart(s.x);svg+=p.dot(x,y,j===count?'x + kT':j===0?'x':'',j===count?H.purple:H.green);if(j)svg+=arrow(H,p.X(x-sign),p.Y(y)-20,p.X(x),p.Y(y)-20,H.purple);}
     return H.result(svg,[['T / k','1 / '+sign*count],['Altura preservada',H.fmt(C.fractionalPart(s.x))]],['Um salto de tamanho T preserva o domínio e o valor da função.','A hipótese pode ser aplicada outra vez no ponto alcançado; essa é a etapa de indução.','Repetir os saltos de −T prova os deslocamentos negativos. mT é período porque ambos os sentidos estão permitidos.'][s.step]);
   };
   E.drawers['s-rescale']=(s,H)=>{
-    const u=s.p*s.x/s.q,next=u+s.p,y=C.fractionalPart(u),p=plot(H,'rescale',-6,6,-.2,1.2);let svg=p.svg;
-    for(let k=-6;k<6;k++)svg+=p.curve(x=>C.fractionalPart(x),H.blue,k,k+1-.001);
+    const u=s.p*s.x/s.q,next=u+s.p,y=C.fractionalPart(u),min=Math.floor(Math.min(u,next))-.2,max=Math.ceil(Math.max(u,next))+.2,integers=Array.from({length:Math.ceil(max)-Math.floor(min)},(_,i)=>Math.floor(min)+i),p=plot(H,'rescale',min,max,-.12,1.12,false,{x:integers.filter(k=>k>=min),y:[0,.5,1]});let svg=p.svg;
+    for(const k of integers)svg+=p.curve(x=>x-k,H.blue,Math.max(k,min),Math.min(k+1-.001,max))+p.dot(k,0,'',H.blue)+p.dot(k+1,1,'',H.blue,false);
     svg+=p.dot(u,y,'(p/q)x',H.purple);
     if(s.step>=1)svg+=p.dot(next,y,'(p/q)x + pT',H.green)+arrow(H,p.X(u),p.Y(y)-20,p.X(next),p.Y(y)-20,H.purple);
     if(s.step>=2)svg+=H.text(280,20,'g(x ± qT) = g(x)',H.green);

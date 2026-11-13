@@ -16,12 +16,13 @@ button,a,input,select,summary{-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:3px solid var(--accent);outline-offset:4px}
 .skip{position:absolute;left:12px;top:-90px;background:white;padding:12px;z-index:9}
 .skip:focus{top:12px}
-.wrap{width:min(1180px,100%);padding:36px 24px 80px;margin:auto}
+.wrap{width:min(1320px,100%);padding:36px 28px 80px;margin:auto}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:22px;border-bottom:1px solid var(--line);font-size:15px}
 .topbar a{text-decoration:none}
 .brand{font-weight:700;color:var(--ink)}
 .eyebrow,.num{font:700 12px/1.5 var(--mono);text-transform:uppercase;letter-spacing:.11em;color:var(--accent)}
 .hero{display:grid;gap:22px;padding:48px 0 36px;border-bottom:1px solid var(--line)}
+.hero>*{min-width:0}
 h1,h2,h3{font-family:var(--display);line-height:1.12;letter-spacing:-.025em;margin:0}
 h1{font-size:clamp(46px,7vw,88px);font-weight:800;max-width:16ch}
 h2{font-size:clamp(29px,3.5vw,39px);font-weight:700}
@@ -34,7 +35,7 @@ p,ol,ul{margin:0}
 .route a:hover{border-color:var(--accent)}
 .route span{background:var(--accent-soft);color:var(--accent);font:700 12px var(--mono);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;flex:none}
 .intro-note{border-left:3px solid var(--accent);padding:3px 0 3px 16px;font-size:16px;max-width:76ch}
-.lesson{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:26px 40px;padding:54px 0;border-bottom:1px solid var(--line);scroll-margin-top:24px;align-items:start}
+.lesson{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:32px 42px;padding:60px 0;border-bottom:1px solid var(--line);scroll-margin-top:24px;align-items:start}
 .lesson>*{min-width:0}
 .text{display:grid;gap:17px}
 .text p{max-width:66ch}
@@ -44,14 +45,14 @@ p,ol,ul{margin:0}
 .equation small{display:block;color:var(--muted);font:14px/1.6 var(--body);margin-top:6px}
 .proof{grid-column:1 / -1;border:1px solid var(--line);border-radius:12px;padding:22px 25px;display:grid;gap:14px}
 .proof h3{font-size:21px}
-.proof ol{display:grid;gap:11px;padding-left:28px}
-.proof li{padding:8px 12px;border-left:3px solid transparent;border-radius:5px}
+.proof ol{display:grid;gap:16px;padding-left:28px;max-width:84ch;width:100%;margin-inline:auto}
+.proof li{padding:12px 16px;border-left:3px solid transparent;border-radius:5px;line-height:1.95}
 .proof li.active{background:var(--accent-soft);border-left-color:var(--accent)}
 .proof .equation{font-size:19px;background:transparent;padding:6px 0}
 .proof p{max-width:100ch}
 .proof-note{font-size:15px;color:var(--muted)}
 .bench{margin:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;align-self:start;background:var(--paper)}
-.bench svg{display:block;width:100%;height:auto;aspect-ratio:2/1;background:white;font-family:var(--mono)}
+.bench svg{display:block;width:100%;height:auto;background:white;font-family:var(--body)}
 .bench svg text{font-size:18px;fill:var(--muted)}
 .bench svg .strong{fill:var(--ink);font-size:20px;font-weight:700}
 .diagram-caption{padding:11px 16px 14px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
@@ -63,7 +64,7 @@ p,ol,ul{margin:0}
 input[type=range]{width:100%;accent-color:var(--accent);min-height:24px;cursor:pointer}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border-top:1px solid var(--line)}
 .stat{display:grid;gap:4px;padding:12px 16px;background:white;min-width:0}
-.stat span{font-size:12px;color:var(--muted)}
+.stat>span{font-size:13px;color:var(--muted)}
 .stat b{font:700 15px/1.5 var(--mono);overflow-wrap:anywhere}
 .stat:last-child:nth-child(odd){grid-column:1 / -1}
 .reading{padding:14px 16px;font-size:15px;background:var(--accent-soft);border-top:1px solid var(--line);min-height:80px}
@@ -97,7 +98,10 @@ details>div{padding-top:15px;display:grid;gap:12px}
 .coming ul{padding-left:23px;max-width:75ch}
 .reference{font-size:13px;color:var(--muted);margin-top:2px}
 .reference a{color:inherit}
-@media(max-width:880px){.lesson{grid-template-columns:minmax(0,1fr);gap:24px}.text p{max-width:none}.bench{max-width:660px;width:100%;justify-self:center}.proof{padding:19px}.hero{padding-top:34px}.lesson{padding:40px 0}}
+.katex{font-size:1.08em}.katex-display{margin:.7em 0;overflow-x:auto;overflow-y:hidden;padding:4px 1px}.equation .katex{font-size:1.05em}.equation{font-family:var(--body);overflow-x:auto;overflow-wrap:normal}.proof li p+p{margin-top:12px}
+.svg-label{width:max-content;white-space:nowrap;font:17px/1.35 var(--body);padding:0 3px;background:rgba(255,255,255,.94)}.svg-label .katex{font-size:1em}.math-measure{position:fixed;left:-10000px;top:0;visibility:hidden}.plot-legend{display:flex;flex-wrap:wrap;gap:10px 24px;padding:4px 20px 17px;font-size:16px}.plot-legend:empty{display:none}.legend-item{display:flex;align-items:baseline;gap:9px;max-width:100%}.legend-item::before{content:'';width:18px;height:4px;flex:none;align-self:center;background:var(--legend-color);border-radius:3px}.legend-item .katex{font-size:1em}.stat b{font:600 16px/1.6 var(--body)}.stat .katex{font-size:1.03em}.xref{text-decoration-style:dotted;text-decoration-thickness:1px}.xref::after{content:'↗';font:11px var(--body);vertical-align:super;margin-left:2px}.selected-formula{grid-column:2/-1;font-size:15px;color:var(--muted);overflow-x:auto}
+@media(max-width:1080px){.lesson{grid-template-columns:minmax(0,1fr);gap:28px}.text p{max-width:80ch}.bench{max-width:760px;width:100%;justify-self:center}.proof{padding:22px}.hero{padding-top:34px}.lesson{padding:44px 0}}
 @media(max-width:560px){body{font-size:17px}.wrap{padding:22px 17px 55px}.topbar{font-size:13px;gap:10px}.lede{font-size:18px}.hero{gap:19px}.cards{grid-template-columns:minmax(0,1fr)}.card{padding:23px}.proof{padding:15px 12px}.proof ol{padding-left:23px}.proof li{padding:7px 8px}.control{grid-template-columns:83px minmax(45px,1fr) 66px;gap:8px}.control.select{grid-template-columns:83px minmax(0,1fr)}.controls{padding:14px}.statement{padding:15px}.equation{font-size:18px}.bench svg text{font-size:19px}.stat{padding:11px 12px}.stat b{font-size:13px}.lesson-nav{font-size:15px}.proof-control span{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
+@media(max-width:350px){h1{font-size:36px}.topbar{flex-wrap:wrap}}
 @media print{.controls,.proof-control,.skip,.topbar{display:none}.wrap{width:100%;padding:0}.lesson{break-inside:avoid;grid-template-columns:1fr}.proof li{padding:0}.hero h1{font-size:42px}details{display:block}}

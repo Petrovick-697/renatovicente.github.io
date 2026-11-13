@@ -4,6 +4,19 @@
   function Q(n,d=1n){if(!d)throw Error('Divisão por zero numa constante.');if(d<0n){n=-n;d=-d;}const g=gcd(n,d);n/=g;d/=g;if(n.toString().length>250||d.toString().length>250)throw Error('Os coeficientes excedem o limite de cálculo exato deste explorador.');return {n,d};}
   const zero=Q(0n),one=Q(1n),add=(a,b)=>Q(a.n*b.d+b.n*a.d,a.d*b.d),neg=a=>Q(-a.n,a.d),mul=(a,b)=>Q(a.n*b.n,a.d*b.d),div=(a,b)=>Q(a.n*b.d,a.d*b.n),num=a=>Number(a.n)/Number(a.d),sign=a=>a.n<0n?-1:a.n>0n?1:0;
   const qstr=a=>a.d===1n?String(a.n):`${a.n}/${a.d}`;
+  const qtex=a=>a.d===1n?String(a.n):`\\frac{${a.n}}{${a.d}}`;
+  const subtract=(value,c)=>sign(c)?`${value}-\\left(${qtex(c)}\\right)`:value;
+  const divide=(value,c)=>c.n===c.d?value:`\\frac{${value}}{${qtex(c)}}`;
+  function toLatex(a,parent=0){
+    if(a.kind==='number')return qtex(a.value);if(a.kind==='x')return 'x';if(a.kind==='constant')return a.name==='π'?'\\pi':'e';
+    if(a.kind==='unary'){const value=a.op+toLatex(a.arg,25);return parent>25?`\\left(${value}\\right)`:value;}
+    if(a.kind==='call'){const v=toLatex(a.arg);return a.name==='sqrt'?`\\sqrt{${v}}`:a.name==='cbrt'?`\\sqrt[3]{${v}}`:a.name==='abs'?`\\left|${v}\\right|`:a.name==='floor'?`\\left\\lfloor${v}\\right\\rfloor`:`\\${a.name}\\left(${v}\\right)`;}
+    const priority=a.op==='^'?30:['*','/'].includes(a.op)?20:10;
+    const l=toLatex(a.left,a.op==='^'?31:priority),r=toLatex(a.right,a.op==='-'?priority+1:0);
+    if(a.op==='/')return `\\frac{${toLatex(a.left)}}{${r}}`;if(a.op==='^'){const value=`${l}^{${r}}`;return parent>30?`\\left(${value}\\right)`:value;}
+    const right=a.op==='*'?toLatex(a.right,20):r,value=`${l}${a.op==='*'?'\\cdot ':a.op}${right}`;
+    return priority<parent?`\\left(${value}\\right)`:value;
+  }
   const funcs={sin:Math.sin,cos:Math.cos,tan:Math.tan,exp:Math.exp,ln:Math.log,sqrt:Math.sqrt,abs:Math.abs,floor:Math.floor,cbrt:Math.cbrt};
   const aliases={sen:'sin',tg:'tan',log:'ln',raiz:'sqrt',piso:'floor'};
   function parse(source){
@@ -90,7 +103,7 @@
     }
     const noPeriod=why=>{report.period=yes('none',why);};
     const mono=(direction,why)=>{report.monotonic=yes(direction,why);};
-    function inverse(formula,fn,why){report.inverse={status:'formula',formula,why,fn:y=>{const x=fn(y);return Number.isFinite(x)&&allowed(x)?x:null;}};}
+    function inverse(formula,fn,why,tex){report.inverse={status:'formula',formula,tex,why,fn:y=>{const x=fn(y);return Number.isFinite(x)&&allowed(x)?x:null;}};}
     if(domain!=='natural'&&knownDomain)noPeriod('Este domínio não vazio é limitado em pelo menos um sentido. Nenhum T > 0 pode preservá-lo por todas as translações ±T.');
     if(p){
       report.domain=domain==='natural'?'ℝ':dom.label.replace('Domínio natural ∩ ','');
@@ -104,7 +117,7 @@
         else if(['positive','negative','cosine'].includes(domain)&&transformed.every(v=>v===transformed[0]))mono(transformed[0]*(domain==='negative'?-1:1)>0?'increasing':'decreasing','Após escrever x = ±t, com t ≥ 0, todas as potências variam no mesmo sentido.');
         if(power&&['increasing','decreasing'].includes(report.monotonic.status)){
           const a=num(p[power]),b=num(p[0]);inverse(power===1?`(y − (${qstr(p[0])}))/(${qstr(p[power])})`:`${power}ª raiz de ((y − (${qstr(p[0])}))/(${qstr(p[power])}))${domain==='negative'&&power%2===0?', com sinal negativo':''}`,
-            y=>{const t=(y-b)/a;if(power%2)return Math.sign(t)*Math.abs(t)**(1/power);if(t<0)return NaN;return (domain==='negative'?-1:1)*t**(1/power);},'Resolva y = axⁿ+b no domínio escolhido. A inversa é definida na imagem f(A); fora dela não recebe um valor.');
+            y=>{const t=(y-b)/a;if(power%2)return Math.sign(t)*Math.abs(t)**(1/power);if(t<0)return NaN;return (domain==='negative'?-1:1)*t**(1/power);},'Resolva y = axⁿ+b no domínio escolhido. A inversa é definida na imagem f(A); fora dela não recebe um valor.',(domain==='negative'&&power%2===0?'-':'')+(power===1?divide(subtract('y',p[0]),p[power]):`\\sqrt${power===2?'':`[${power}]`}{${divide(subtract('y',p[0]),p[power])}}`));
         }
       }
       const even=p.every((v,i)=>i%2===0||!sign(v)),odd=p.every((v,i)=>i%2===1||!sign(v));
@@ -114,24 +127,25 @@
       if(inner?.length===2&&sign(inner[1])){
         const A=num(atom.a),D=num(atom.d),B=num(inner[1]),K=num(inner[0]),orientation=sign(atom.a)*sign(inner[1]),canonical=inner[1].n===inner[1].d&&!sign(inner[0]);
         const increasing=orientation>0?'increasing':'decreasing';
+        const outerY=divide(subtract('y',atom.d),atom.a),undoInner=value=>divide(subtract(value,inner[0]),inner[1]);
         if(['exp','ln','sqrt','cbrt'].includes(name)){
           if(name==='exp'&&domain==='natural')report.parity=yes('neither','Uma exponencial afim não constante é injetora, portanto não é par. Ela tende a uma constante em um extremo e diverge no outro, o que também impede a identidade ímpar.');
           mono(increasing,'A função elementar é estritamente crescente no seu domínio; as mudanças afins de entrada e saída determinam o sentido.');
           if(domain==='natural')noPeriod('Uma função estritamente monótona não pode repetir a saída em x e x+T, para T > 0.');
           if(name==='ln'||name==='sqrt'){report.domain=`${dom.label}; exigir ${key(atom.atom.arg)} ${name==='ln'?'>':'≥'} 0`;if(K===0)symmetric=false;}
           const u=y=>(y-D)/A;
-          if(name==='exp')inverse(`(ln((y − (${qstr(atom.d)}))/(${qstr(atom.a)})) − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>u(y)>0?(Math.log(u(y))-K)/B:NaN,'A imagem exige (y−d)/a > 0. Logaritmo e exponencial se desfazem nesse domínio.');
-          if(name==='ln')inverse(`(exp((y − (${qstr(atom.d)}))/(${qstr(atom.a)})) − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>(Math.exp(u(y))-K)/B,'Exponencie a igualdade e isole x. A fórmula usa a imagem do domínio escolhido.');
-          if(name==='sqrt')inverse(`(((y − (${qstr(atom.d)}))/(${qstr(atom.a)}))² − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>u(y)>=0?(u(y)**2-K)/B:NaN,'Antes de elevar ao quadrado, exija (y−d)/a ≥ 0; a raiz quadrada é não negativa.');
-          if(name==='cbrt')inverse(`(((y − (${qstr(atom.d)}))/(${qstr(atom.a)}))³ − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>(u(y)**3-K)/B,'A raiz cúbica real e o cubo se desfazem em toda a reta.');
+          if(name==='exp')inverse(`(ln((y − (${qstr(atom.d)}))/(${qstr(atom.a)})) − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>u(y)>0?(Math.log(u(y))-K)/B:NaN,'A imagem exige (y−d)/a > 0. Logaritmo e exponencial se desfazem nesse domínio.',undoInner(`\\ln\\left(${outerY}\\right)`));
+          if(name==='ln')inverse(`(exp((y − (${qstr(atom.d)}))/(${qstr(atom.a)})) − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>(Math.exp(u(y))-K)/B,'Exponencie a igualdade e isole x. A fórmula usa a imagem do domínio escolhido.',undoInner(`e^{${outerY}}`));
+          if(name==='sqrt')inverse(`(((y − (${qstr(atom.d)}))/(${qstr(atom.a)}))² − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>u(y)>=0?(u(y)**2-K)/B:NaN,'Antes de elevar ao quadrado, exija (y−d)/a ≥ 0; a raiz quadrada é não negativa.',undoInner(`\\left(${outerY}\\right)^2`));
+          if(name==='cbrt')inverse(`(((y − (${qstr(atom.d)}))/(${qstr(atom.a)}))³ − (${qstr(inner[0])}))/(${qstr(inner[1])})`,y=>(u(y)**3-K)/B,'A raiz cúbica real e o cubo se desfazem em toda a reta.',undoInner(`\\left(${outerY}\\right)^3`));
         }else if(['sin','cos','tan'].includes(name)){
           if(domain==='natural'){report.period=yes('periodic',`Um período é ${name==='tan'?'π':'2π'}/|${qstr(inner[1])}|. A translação do argumento preserva o domínio e os valores, também para a tangente.`);report.period.value=(name==='tan'?Math.PI:2*Math.PI)/Math.abs(B);}
           const restricted=canonical&&((name==='sin'&&domain==='sine')||(name==='cos'&&domain==='cosine')||(name==='tan'&&domain==='tangent'));
-          if(restricted){mono(name==='cos'?(A>0?'decreasing':'increasing'):(A>0?'increasing':'decreasing'),'Neste intervalo canônico a função trigonométrica é estritamente monótona.');const inv=name==='sin'?Math.asin:name==='cos'?Math.acos:Math.atan;inverse(`${name==='sin'?'arcsin':name==='cos'?'arccos':'arctan'}((y − (${qstr(atom.d)}))/(${qstr(atom.a)}))`,y=>inv((y-D)/A),'A restrição escolhe um único ramo. Sem ela, a função trigonométrica periódica não é injetora.');}
+          if(restricted){mono(name==='cos'?(A>0?'decreasing':'increasing'):(A>0?'increasing':'decreasing'),'Neste intervalo canônico a função trigonométrica é estritamente monótona.');const inv=name==='sin'?Math.asin:name==='cos'?Math.acos:Math.atan;inverse(`${name==='sin'?'arcsin':name==='cos'?'arccos':'arctan'}((y − (${qstr(atom.d)}))/(${qstr(atom.a)}))`,y=>inv((y-D)/A),'A restrição escolhe um único ramo. Sem ela, a função trigonométrica periódica não é injetora.',`\\${name==='sin'?'arcsin':name==='cos'?'arccos':'arctan'}\\left(${outerY}\\right)`);}
           else if(['natural','positive','negative'].includes(domain)){mono('neither','As oscilações ou os saltos entre ramos impedem monotonicidade global neste domínio.');report.inverse=yes('none','Há entradas diferentes com a mesma saída. Restrinja a um ramo injetor para obter uma inversa.');}
         }else if(name==='abs'&&!sign(inner[0])){
           if(domain==='natural'){mono('neither','Entradas opostas têm a mesma saída.');noPeriod('O valor absoluto cresce sem limite nos dois extremos; translações sucessivas não mantêm o valor.');report.inverse=yes('none','A simetria x ↦ −x impede a injetividade em ℝ.');}
-          else if(['positive','negative','cosine'].includes(domain)){const slopeQ=mul(atom.a,Q(inner[1].n<0n?-inner[1].n:inner[1].n,inner[1].d)),signed=domain==='negative'?neg(slopeQ):slopeQ,slope=num(signed);mono(sign(signed)>0?'increasing':'decreasing','O sinal de x está fixado; o módulo reduz-se a uma função afim.');inverse(`(y − (${qstr(atom.d)}))/(${qstr(signed)})`,y=>(y-D)/slope,'No domínio escolhido o módulo tem uma única expressão afim.');}
+          else if(['positive','negative','cosine'].includes(domain)){const slopeQ=mul(atom.a,Q(inner[1].n<0n?-inner[1].n:inner[1].n,inner[1].d)),signed=domain==='negative'?neg(slopeQ):slopeQ,slope=num(signed);mono(sign(signed)>0?'increasing':'decreasing','O sinal de x está fixado; o módulo reduz-se a uma função afim.');inverse(`(y − (${qstr(atom.d)}))/(${qstr(signed)})`,y=>(y-D)/slope,'No domínio escolhido o módulo tem uma única expressão afim.',divide(subtract('y',atom.d),signed));}
         }else if(name==='floor'&&domain==='natural'){mono(orientation>0?'nondecreasing':'nonincreasing','O piso preserva a ordem no sentido não estrito e é constante em intervalos.');noPeriod('Nenhum deslocamento não nulo preserva o piso em todos os pontos; existe sempre um degrau atravessado por esse deslocamento.');report.inverse=yes('none','Cada degrau contém entradas distintas com a mesma saída.');}
       }
     }
@@ -145,7 +159,7 @@
         noPeriod(domain==='natural'?'O domínio exclui exatamente um polo. Uma translação não nula deslocaria esse polo, portanto não preservaria o domínio.':'O domínio restrito é não vazio e limitado em pelo menos um sentido. Nenhum T > 0 o preserva por todas as translações ±T.');
         if(domain==='natural')mono('neither','A função muda de ramo ao atravessar o polo; a monotonicidade em cada ramo não implica monotonicidade em todo o domínio.');
         if(!sign(denominator[0])&&['positive','negative','cosine'].includes(domain))mono(sign(numerator[0])*sign(denominator[1])>0?'decreasing':'increasing','No ramo de sinal fixado, comparar os recíprocos inverte a ordem; o coeficiente determina o sentido final.');
-        inverse(`((${qstr(numerator[0])})/y − (${qstr(denominator[0])}))/(${qstr(denominator[1])})`,y=>y===0?NaN:(A/y-K)/B,'Resolver y = a/(bx+c) exige y ≠ 0. A fórmula retorna apenas entradas do domínio escolhido. A função é injetora mesmo quando não é globalmente monótona.');
+        inverse(`((${qstr(numerator[0])})/y − (${qstr(denominator[0])}))/(${qstr(denominator[1])})`,y=>y===0?NaN:(A/y-K)/B,'Resolver y = a/(bx+c) exige y ≠ 0. A fórmula retorna apenas entradas do domínio escolhido. A função é injetora mesmo quando não é globalmente monótona.',divide(subtract(`\\frac{${qtex(numerator[0])}}{y}`,denominator[0]),denominator[1]));
         if(domain!=='natural'&&!['sine','tangent'].includes(domain))report.parity=yes('not-applicable','O ramo selecionado não tem domínio simétrico.');
       }
     }
@@ -154,5 +168,5 @@
     if(!symmetric&&domain==='natural'&&naturalHalf)report.parity=yes('not-applicable','O domínio natural desta função afim sob logaritmo ou raiz é uma semirreta, não simétrica.');
     return report;
   }
-  return Object.freeze({parse,evaluate,analyze,domains});
+  return Object.freeze({parse,evaluate,analyze,domains,toLatex});
 });

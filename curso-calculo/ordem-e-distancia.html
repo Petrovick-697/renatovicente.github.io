@@ -3,8 +3,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ordem e distância · Cálculo</title>
 <meta name="description" content="Ordem, intervalos e módulo na reta real. Demonstrações completas das desigualdades triangulares com figuras interativas.">
-<link rel="stylesheet" href="assets/course.css?v=5">
-<script defer src="assets/math.js?v=5"></script><script defer src="assets/course.js?v=5"></script>
+<link rel="stylesheet" href="assets/vendor/katex/katex.min.css"><link rel="stylesheet" href="assets/course.css?v=11"><script defer src="assets/vendor/katex/katex.min.js"></script><script defer src="assets/vendor/katex/contrib/auto-render.min.js"></script><script defer src="assets/latex.js?v=11"></script>
+<script defer src="assets/math.js?v=11"></script><script defer src="assets/course.js?v=11"></script>
 </head><body>
 <a class="skip" href="#ordem">Pular para a aula</a>
 <main class="wrap">
@@ -12,116 +12,121 @@
 <header class="hero">
   <div class="eyebrow">Fatos básicos · A reta real</div>
   <h1>Ordem<br>e distância</h1>
-  <p class="lede">A expressão |x − a| mede uma distância. A partir dessa interpretação, vamos descrever intervalos, comparar somas e demonstrar duas desigualdades que serão usadas repetidamente no cálculo.</p>
+  <p class="lede">A expressão \(|x - a|\) mede uma distância. A partir dessa interpretação, vamos descrever intervalos, comparar somas e demonstrar duas desigualdades que serão usadas repetidamente no cálculo.</p>
   <p class="meta">Referência: seção 1.1, pp. 15–18 · Pré-requisitos: operações com números reais</p>
-  <ol class="route"><li><a href="#ordem"><span>1</span>Ordem</a></li><li><a href="#intervalos"><span>2</span>Intervalos</a></li><li><a href="#modulo"><span>3</span>Módulo</a></li><li><a href="#vizinhancas"><span>4</span>Distância</a></li><li><a href="#triangular"><span>5</span>Desigualdade triangular</a></li><li><a href="#reversa"><span>6</span>Desigualdade reversa</a></li></ol>
+  <ol class="route"><li><a href="#ordem"><span>\(1\)</span>Ordem</a></li><li><a href="#intervalos"><span>\(2\)</span>Intervalos</a></li><li><a href="#modulo"><span>\(3\)</span>Módulo</a></li><li><a href="#vizinhancas"><span>\(4\)</span>Distância</a></li><li><a href="#triangular"><span>\(5\)</span>Desigualdade triangular</a></li><li><a href="#reversa"><span>\(6\)</span>Desigualdade reversa</a></li></ol>
 </header>
 <noscript><p class="intro-note">Ative o JavaScript para usar as figuras interativas. Os enunciados, as demonstrações e os exercícios continuam disponíveis no texto.</p></noscript>
 
 <section class="lesson" id="ordem">
  <div class="text">
   <span class="num">Passo 1 · Estrutura admitida</span><h2>A ordem na reta real</h2>
-  <p>Representamos os números reais por pontos de uma reta orientada. Escrever a &lt; b significa que a está à esquerda de b. A relação a ≤ b permite também a igualdade.</p>
-  <p>Admitimos conhecidas as operações de corpo em ℝ e sua compatibilidade com a ordem. A ordem é reflexiva, antissimétrica e transitiva: a ≤ a; de a ≤ b e b ≤ a resulta a = b; e de a ≤ b ≤ c resulta a ≤ c. Além disso, quaisquer dois reais são comparáveis.</p>
-  <div class="equation">a ≤ b, c ≤ d ⇒ a + c ≤ b + d<br>a ≤ b, c &gt; 0 ⇒ ca ≤ cb<br>a ≤ b, c &lt; 0 ⇒ cb ≤ ca</div>
-  <p>Uma multiplicação positiva preserva a ordem; uma negativa a inverte. Se c = 0, os dois produtos são zero. A bancada mostra esses três casos.</p>
-  <div class="talk"><h3>Para conversar</h3><ul><li>O que acontece com a distância entre os pontos quando |c| aumenta?</li><li>Por que dividir uma desigualdade por um número negativo exige inverter seu sentido?</li></ul></div>
+  <p>Representamos os números reais por pontos de uma reta orientada. Escrever \(a &lt; b\) significa que \(a\) está à esquerda de \(b\). A relação \(a \le  b\) permite também a igualdade.</p>
+  <p>Admitimos conhecidas as operações de corpo em \(\mathbb{R}\) e sua compatibilidade com a ordem. A ordem é reflexiva, antissimétrica e transitiva: \(a \le  a\); de \(a \le  b\) e \(b \le  a\) resulta \(a = b\); e de \(a \le  b \le  c\) resulta \(a \le  c\). Além disso, quaisquer dois reais são comparáveis.</p>
+  <div class="equation">\[a \le  b, c \le  d \implies  a + c \le  b + d\]
+\[a \le  b, c &gt; 0 \implies  ca \le  cb\]
+\[a \le  b, c &lt; 0 \implies  cb \le  ca\]</div>
+  <p>Uma multiplicação positiva preserva a ordem; uma negativa a inverte. Se \(c = 0\), os dois produtos são zero. A bancada mostra esses três casos.</p>
+  <div class="talk"><h3>Para conversar</h3><ul><li>O que acontece com a distância entre os pontos quando \(|c|\) aumenta?</li><li>Por que dividir uma desigualdade por um número negativo exige inverter seu sentido?</li></ul></div>
   <p class="reference">Livro: propriedades da ordem, pp. 15–16.</p>
  </div>
- <figure class="bench" id="lab-order" data-lab="order"><figcaption>Escolha a &lt; b e um fator c. Compare a ordem antes e depois da multiplicação.</figcaption></figure>
+ <figure class="bench" id="lab-order" data-lab="order"><figcaption>Escolha \(a &lt; b\) e um fator \(c\). Compare a ordem antes e depois da multiplicação.</figcaption></figure>
 </section>
 
 <section class="lesson" id="intervalos">
  <div class="text">
-  <span class="num">Passo 2 · Definição 1.1.1</span><h2>Quais extremos pertencem ao intervalo?</h2>
-  <p>Para a ≤ b, um intervalo é um conjunto de pontos que satisfaz uma condição de ordem. Os colchetes incluem o extremo; os parênteses o excluem.</p>
-  <div class="equation">(a, b) = {x ∈ ℝ : a &lt; x &lt; b}<br>[a, b] = {x ∈ ℝ : a ≤ x ≤ b}<br>[a, b) = {x ∈ ℝ : a ≤ x &lt; b}<br>(a, b] = {x ∈ ℝ : a &lt; x ≤ b}</div>
-  <p>Os intervalos [a, +∞) e (a, +∞) são semirretas; analogamente definimos (−∞, b] e (−∞, b). Os símbolos ±∞ não são números reais e não são extremos incluídos. O intervalo (−∞, +∞) é ℝ.</p>
-  <p>Quando a = b, temos [a, a] = {a}. As outras três escolhas dão o conjunto vazio, pois nenhuma delas permite simultaneamente as duas desigualdades.</p>
-  <p class="reference">Livro: definição 1.1.1, p. 16.</p>
+  <span class="num">Passo 2 · Definição <a class="xref" href="ordem-e-distancia.html#intervalos" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.1</a></span><h2>Quais extremos pertencem ao intervalo?</h2>
+  <p>Para \(a \le  b\), um intervalo é um conjunto de pontos que satisfaz uma condição de ordem. Os colchetes incluem o extremo; os parênteses o excluem.</p>
+  <div class="equation">\[(a, b) = \{x \in  \mathbb{R} : a &lt; x &lt; b\}\]
+\[[a, b] = \{x \in  \mathbb{R} : a \le  x \le  b\}\]
+\[[a, b) = \{x \in  \mathbb{R} : a \le  x &lt; b\}\]
+\[(a, b] = \{x \in  \mathbb{R} : a &lt; x \le  b\}\]</div>
+  <p>Os intervalos \([a, +\infty )\) e \((a, +\infty )\) são semirretas; analogamente definimos \((-\infty , b]\) e \((-\infty , b)\). Os símbolos \(\pm \infty \) não são números reais e não são extremos incluídos. O intervalo \((-\infty , +\infty )\) é \(\mathbb{R}\).</p>
+  <p>Quando \(a = b\), temos \([a,a]=\{a\}\). As outras três escolhas dão o conjunto vazio, pois nenhuma delas permite simultaneamente as duas desigualdades.</p>
+  <p class="reference">Livro: definição <a class="xref" href="ordem-e-distancia.html#intervalos" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.1</a>, p. 16.</p>
  </div>
  <figure class="bench" id="lab-interval" data-lab="interval"><figcaption>Reduza a largura a zero e alterne a inclusão dos extremos. O teste de pertinência usa as desigualdades do intervalo.</figcaption></figure>
  <div class="exercises"><details><summary>Exercícios · Intervalos</summary><div><ol class="exercise-list">
-  <li>Escreva como intervalo o conjunto dos x tais que −2 &lt; x ≤ 4. O ponto −2 pertence a ele?<details><summary>Ver resolução</summary><div class="answer">O intervalo é (−2, 4]. O ponto −2 não pertence, porque a primeira desigualdade é estrita. O ponto 4 pertence.</div></details></li>
-  <li>Determine [3, 3] e (3, 3].<details><summary>Ver resolução</summary><div class="answer">[3, 3] = {3}. Para pertencer a (3, 3], seria necessário 3 &lt; x ≤ 3, o que é impossível. Logo (3, 3] = ∅.</div></details></li>
+  <li>Escreva como intervalo o conjunto dos \(x\) tais que \(-2 &lt; x \le  4\). O ponto \(-2\) pertence a ele?<details><summary>Ver resolução</summary><div class="answer">O intervalo é \((-2, 4]\). O ponto \(-2\) não pertence, porque a primeira desigualdade é estrita. O ponto \(4\) pertence.</div></details></li>
+  <li>Determine \([3, 3]\) e \((3, 3]\).<details><summary>Ver resolução</summary><div class="answer">\([3, 3] = \{3\}\). Para pertencer a \((3, 3]\), seria necessário \(3 &lt; x \le  3\), o que é impossível. Logo \((3, 3] = \varnothing \).</div></details></li>
  </ol></div></details></div>
 </section>
 
 <section class="lesson" id="modulo" data-result="propriedades-do-modulo">
  <div class="text">
-  <span class="num">Passo 3 · Definição 1.1.2</span><h2>O módulo registra uma distância</h2>
-  <p>O módulo de x é sua distância até zero:</p>
-  <div class="equation">|x| = x, se x ≥ 0;<br>|x| = −x, se x &lt; 0.</div>
-  <div class="statement"><h3>Propriedades</h3><p>Para todos x, y ∈ ℝ, valem |−x| = |x|, |x| ≥ 0, x ≤ |x| e |xy| = |x||y|. Além disso, |x| = 0 se, e somente se, x = 0.</p></div>
-  <p>O sinal de x indica o lado da origem. O número |x| registra apenas a distância. Por isso os pontos x e −x têm o mesmo módulo.</p>
-  <p class="reference">Livro: definição 1.1.2 e propriedades subsequentes, p. 16. As provas abaixo explicitam os exercícios propostos nessa página.</p>
+  <span class="num">Passo 3 · Definição <a class="xref" href="ordem-e-distancia.html#modulo" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.2</a></span><h2>O módulo registra uma distância</h2>
+  <p>O módulo de \(x\) é sua distância até zero:</p>
+  <div class="equation">\[|x|=\begin{cases}x,&amp;x\ge0,\\-x,&amp;x&lt;0.\end{cases}\]</div>
+  <div class="statement"><h3>Propriedades</h3><p>Para todos \(x, y \in  \mathbb{R}\), valem \(|-x| = |x|, |x| \ge  0, x \le  |x|\) e \(|xy| = |x||y|\). Além disso, \(|x| = 0\) se, e somente se, \(x = 0\).</p></div>
+  <p>O sinal de \(x\) indica o lado da origem. O número \(|x|\) registra apenas a distância. Por isso os pontos \(x\) e \(-x\) têm o mesmo módulo.</p>
+  <p class="reference">Livro: definição <a class="xref" href="ordem-e-distancia.html#modulo" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.2</a> e propriedades subsequentes, p. 16. As provas abaixo explicitam os exercícios propostos nessa página.</p>
  </div>
- <figure class="bench" id="lab-modulus" data-lab="modulus" data-proof="proof-modulus"><figcaption>Compare x, −x e seus módulos. Depois altere y e acompanhe a propriedade do produto.</figcaption></figure>
+ <figure class="bench" id="lab-modulus" data-lab="modulus" data-proof="proof-modulus"><figcaption>Compare \(x, -x\) e seus módulos. Depois altere \(y\) e acompanhe a propriedade do produto.</figcaption></figure>
  <div class="proof"><h3>Demonstração</h3><ol id="proof-modulus">
-  <li>Se x ≥ 0, |x| = x ≥ 0; se x &lt; 0, |x| = −x &gt; 0. Esses dois casos também mostram que |x| = 0 equivale a x = 0.</li>
-  <li>Para x ≥ 0, temos |−x| = x = |x|. Para x &lt; 0, temos −x &gt; 0, de modo que |−x| = −x = |x|.</li>
-  <li>Se x ≥ 0, x = |x|. Se x &lt; 0, x &lt; 0 &lt; −x = |x|. Portanto x ≤ |x| em ambos os casos.</li>
-  <li>Se x ou y é zero, a identidade do produto vale. Se ambos são positivos, |xy| = xy = |x||y|. Se ambos são negativos, |xy| = xy = (−x)(−y) = |x||y|. Se têm sinais opostos, |xy| = −xy; nesse caso exatamente um dos fatores de |x||y| recebe um sinal negativo, e o produto também é −xy.</li>
+  <li>Se \(x \ge  0, |x| = x \ge  0\); se \(x &lt; 0, |x| = -x &gt; 0\). Esses dois casos também mostram que \(|x| = 0\) equivale a \(x = 0\).</li>
+  <li>Para \(x \ge  0\), temos \(|-x| = x = |x|\). Para \(x &lt; 0\), temos \(-x &gt; 0\), de modo que \(|-x| = -x = |x|\).</li>
+  <li>Se \(x \ge  0, x = |x|\). Se \(x &lt; 0, x &lt; 0 &lt; -x = |x|\). Portanto \(x \le  |x|\) em ambos os casos.</li>
+  <li>Se \(x\) ou \(y\) é zero, a identidade do produto vale. Se ambos são positivos, \(|xy| = xy = |x||y|\). Se ambos são negativos, \(|xy| = xy = (-x)(-y) = |x||y|\). Se têm sinais opostos, \(|xy| = -xy\); nesse caso exatamente um dos fatores de \(|x||y|\) recebe um sinal negativo, e o produto também é \(-xy\).</li>
  </ol></div>
 </section>
 
 <section class="lesson" id="vizinhancas" data-result="modulo-e-intervalo">
  <div class="text">
-  <span class="num">Passo 4 · Exemplo 1.1.3</span><h2>Uma desigualdade de distância</h2>
-  <p>A distância entre x e a é |x − a|. Dado ε &gt; 0, os pontos a uma distância menor que ε de a formam o intervalo aberto de centro a e raio ε.</p>
-  <div class="statement"><h3>Equivalência</h3><div class="equation">|x − a| &lt; ε ⇔ a − ε &lt; x &lt; a + ε.<small>Hipóteses: a, x ∈ ℝ e ε &gt; 0.</small></div></div>
-  <p>Para todo R ≥ 0, vale também |x − a| ≤ R se, e somente se, a − R ≤ x ≤ a + R. Quando R = 0, ambas as condições equivalem a x = a. Para |x − a| &gt; ε, obtemos as duas semirretas exteriores: x &lt; a − ε ou x &gt; a + ε.</p>
-  <p>A forma 0 &lt; |x − a| &lt; ε exclui também o centro a. Essa vizinhança perfurada será usada ao definir pontos de acumulação.</p>
-  <p class="reference">Livro: exemplo 1.1.3, pp. 16–17.</p>
+  <span class="num">Passo 4 · Exemplo <a class="xref" href="ordem-e-distancia.html#vizinhancas" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.3</a></span><h2>Uma desigualdade de distância</h2>
+  <p>A distância entre \(x\) e \(a\) é \(|x - a|\). Dado \(\varepsilon  &gt; 0\), os pontos a uma distância menor que \(\varepsilon \) de \(a\) formam o intervalo aberto de centro \(a\) e raio \(\varepsilon \).</p>
+  <div class="statement"><h3>Equivalência</h3><div class="equation">\[|x - a| &lt; \varepsilon  \iff  a - \varepsilon  &lt; x &lt; a + \varepsilon \].<small>Hipóteses: \[a, x \in  \mathbb{R}\] e \[\varepsilon  &gt; 0\].</small></div></div>
+  <p>Para todo \(R \ge  0\), vale também \(|x - a| \le  R\) se, e somente se, \(a - R \le  x \le  a + R\). Quando \(R = 0\), ambas as condições equivalem a \(x = a\). Para \(|x - a| &gt; \varepsilon \), obtemos as duas semirretas exteriores: \(x &lt; a - \varepsilon \) ou \(x &gt; a + \varepsilon \).</p>
+  <p>A forma \(0 &lt; |x - a| &lt; \varepsilon \) exclui também o centro \(a\). Essa vizinhança perfurada será usada ao definir pontos de acumulação.</p>
+  <p class="reference">Livro: exemplo <a class="xref" href="ordem-e-distancia.html#vizinhancas" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.3</a>, pp. 16–17.</p>
  </div>
- <figure class="bench" id="lab-neighborhood" data-lab="neighborhood" data-proof="proof-neighborhood"><figcaption>Mova x até o centro e até os extremos. Compare a distância com ε e observe as desigualdades estritas.</figcaption></figure>
+ <figure class="bench" id="lab-neighborhood" data-lab="neighborhood" data-proof="proof-neighborhood"><figcaption>Mova \(x\) até o centro e até os extremos. Compare a distância com \(\varepsilon \) e observe as desigualdades estritas.</figcaption></figure>
  <div class="proof"><h3>Demonstração</h3><ol id="proof-neighborhood">
-  <li>Para todo t ∈ ℝ, −|t| ≤ t ≤ |t|. Assim, |t| &lt; ε implica −ε &lt; t &lt; ε.</li>
-  <li>Reciprocamente, suponha −ε &lt; t &lt; ε. Se t ≥ 0, |t| = t &lt; ε. Se t &lt; 0, a desigualdade −ε &lt; t dá −t &lt; ε, isto é, |t| &lt; ε.</li>
-  <li>Aplique a equivalência anterior a t = x − a e some a aos três termos de −ε &lt; x − a &lt; ε. Isso produz a − ε &lt; x &lt; a + ε. Cada passagem é reversível.</li>
- </ol><p><strong>Versão não estrita, incluindo raio zero.</strong> Se |t| ≤ R, então −R ≤ −|t| ≤ t ≤ |t| ≤ R. Reciprocamente, de −R ≤ t ≤ R obtemos |t| = t ≤ R quando t ≥ 0 e |t| = −t ≤ R quando t &lt; 0. Logo, para todo R ≥ 0, |t| ≤ R ⇔ −R ≤ t ≤ R. Aplique a t = x − a. Para R = 0, a condição −R ≤ t ≤ R impõe t = 0.</p></div>
+  <li>Para todo \(t \in  \mathbb{R}, -|t| \le  t \le  |t|\). Assim, \(|t| &lt; \varepsilon \) implica \(-\varepsilon  &lt; t &lt; \varepsilon \).</li>
+  <li>Reciprocamente, suponha \(-\varepsilon  &lt; t &lt; \varepsilon \). Se \(t \ge  0, |t| = t &lt; \varepsilon \). Se \(t &lt; 0\), a desigualdade \(-\varepsilon  &lt; t\) dá \(-t &lt; \varepsilon \), isto é, \(|t| &lt; \varepsilon \).</li>
+  <li>Aplique a equivalência anterior a \(t = x - a\) e some a aos três termos de \(-\varepsilon  &lt; x - a &lt; \varepsilon \). Isso produz \(a - \varepsilon  &lt; x &lt; a + \varepsilon \). Cada passagem é reversível.</li>
+ </ol><p><strong>Versão não estrita, incluindo raio zero.</strong> Se \(|t| \le  R\), então \(-R \le  -|t| \le  t \le  |t| \le  R\). Reciprocamente, de \(-R \le  t \le  R\) obtemos \(|t| = t \le  R\) quando \(t \ge  0\) e \(|t| = -t \le  R\) quando \(t &lt; 0\). Logo, para todo \(R \ge  0, |t| \le  R \iff  -R \le  t \le  R\). Aplique a \(t = x - a\). Para \(R = 0\), a condição \(-R \le  t \le  R\) impõe \(t = 0\).</p></div>
 </section>
 
 <section class="lesson" id="triangular" data-result="desigualdade-triangular">
  <div class="text">
-  <span class="num">Passo 5 · Desigualdade (1.1.2)</span><h2>Somar dois deslocamentos</h2>
-  <div class="statement"><h3>Desigualdade triangular</h3><div class="equation">∀a, b ∈ ℝ, &nbsp; |a + b| ≤ |a| + |b|.</div></div>
-  <p>O deslocamento total a + b pode sofrer cancelamento. A soma |a| + |b| conta os comprimentos dos dois deslocamentos, independentemente de seus sentidos.</p>
-  <p>Na figura, a está entre −|a| e |a|, e b entre −|b| e |b|. Ao somar as duas inclusões, o ponto a + b fica entre −(|a| + |b|) e |a| + |b|.</p>
-  <div class="talk"><h3>Para conversar</h3><ul><li>Escolha a e b com sinais opostos. Onde a desigualdade pode ser estrita?</li><li>Que parte do argumento vale para qualquer par de reais, mesmo quando você não conhece seus valores?</li></ul></div>
-  <p class="reference">Livro: desigualdade triangular e demonstração, pp. 17–18.</p>
+  <span class="num">Passo 5 · <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">Desigualdade (1.1.2)</a></span><h2>Somar dois deslocamentos</h2>
+  <div class="statement"><h3><a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">Desigualdade triangular</a></h3><div class="equation">\[\forall a, b \in  \mathbb{R},   |a + b| \le  |a| + |b|\].</div></div>
+  <p>O deslocamento total \(a + b\) pode sofrer cancelamento. A soma \(|a| + |b|\) conta os comprimentos dos dois deslocamentos, independentemente de seus sentidos.</p>
+  <p>Na figura, \(a\) está entre \(-|a|\) e \(|a|\), e \(b\) entre \(-|b|\) e \(|b|\). Ao somar as duas inclusões, o ponto \(a + b\) fica entre \(-(|a| + |b|)\) e \(|a| + |b|\).</p>
+  <div class="talk"><h3>Para conversar</h3><ul><li>Escolha \(a\) e \(b\) com sinais opostos. Onde a desigualdade pode ser estrita?</li><li>Que parte do argumento vale para qualquer par de reais, mesmo quando você não conhece seus valores?</li></ul></div>
+  <p class="reference">Livro: <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">desigualdade triangular</a> e demonstração, pp. 17–18.</p>
  </div>
  <figure class="bench" id="lab-triangle" data-lab="triangle" data-proof="proof-triangle"><figcaption>As três linhas usam a mesma escala. Avance pelos passos para acompanhar a soma das desigualdades.</figcaption></figure>
  <div class="proof"><h3>Demonstração</h3><ol id="proof-triangle">
-  <li>Pelas propriedades do módulo, −|a| ≤ a ≤ |a|.</li>
-  <li>Também −|b| ≤ b ≤ |b|. A compatibilidade da ordem com a soma permite somar os membros correspondentes.</li>
-  <li>Obtemos −(|a| + |b|) ≤ a + b ≤ |a| + |b|. Como |a| + |b| ≥ 0, a equivalência entre módulo e intervalo fechado fornece |a + b| ≤ |a| + |b|.</li>
+  <li>Pelas propriedades do módulo, \(-|a| \le  a \le  |a|\).</li>
+  <li>Também \(-|b| \le  b \le  |b|\). A compatibilidade da ordem com a soma permite somar os membros correspondentes.</li>
+  <li>Obtemos \(-(|a| + |b|) \le  a + b \le  |a| + |b|\). Como \(|a| + |b| \ge  0\), a equivalência entre módulo e intervalo fechado fornece \(|a + b| \le  |a| + |b|\).</li>
  </ol><p class="proof-note">O argumento usa apenas propriedades válidas para reais arbitrários. Os parâmetros da figura escolhem um exemplo dessas mesmas relações.</p></div>
- <div class="exercises"><details><summary>Exercícios · Desigualdade triangular</summary><div><ol class="exercise-list">
-  <li>Dê um exemplo em que |a + b| &lt; |a| + |b| e outro em que ocorre igualdade.<details><summary>Ver resolução</summary><div class="answer">Para a = 4 e b = −3, temos |a + b| = 1 &lt; 7 = |a| + |b|. Para a = 4 e b = 3, os dois lados valem 7.</div></details></li>
-  <li>Demonstre que |a + b + c| ≤ |a| + |b| + |c| para todos a, b, c ∈ ℝ.<details><summary>Ver resolução</summary><div class="answer">Aplique a desigualdade triangular primeiro a (a + b) + c: |a + b + c| ≤ |a + b| + |c|. Uma segunda aplicação dá |a + b| ≤ |a| + |b|. Substituindo essa cota na primeira desigualdade, chega-se ao resultado.</div></details></li>
-  <li>Prove que ocorre igualdade na desigualdade triangular se, e somente se, ab ≥ 0.<details><summary>Ver resolução</summary><div class="answer">Os dois lados são não negativos, então são iguais exatamente quando seus quadrados são iguais. A diferença dos quadrados é (|a| + |b|)² − (a + b)² = 2(|a||b| − ab) = 2(|ab| − ab). Ela é zero exatamente quando |ab| = ab, isto é, quando ab ≥ 0.</div></details></li>
+ <div class="exercises"><details><summary>Exercícios · <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">Desigualdade triangular</a></summary><div><ol class="exercise-list">
+  <li>Dê um exemplo em que \(|a + b| &lt; |a| + |b|\) e outro em que ocorre igualdade.<details><summary>Ver resolução</summary><div class="answer">Para \(a = 4\) e \(b = -3\), temos \(|a + b| = 1 &lt; 7 = |a| + |b|\). Para \(a = 4\) e \(b = 3\), os dois lados valem \(7\).</div></details></li>
+  <li>Demonstre que \(|a + b + c| \le  |a| + |b| + |c|\) para todos \(a, b, c \in  \mathbb{R}\).<details><summary>Ver resolução</summary><div class="answer">Aplique a <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">desigualdade triangular</a> primeiro a \((a + b) + c: |a + b + c| \le  |a + b| + |c|\). Uma segunda aplicação dá \(|a + b| \le  |a| + |b|\). Substituindo essa cota na primeira desigualdade, chega-se ao resultado.</div></details></li>
+  <li>Prove que ocorre igualdade na <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">desigualdade triangular</a> se, e somente se, \(ab \ge  0\).<details><summary>Ver resolução</summary><div class="answer">Os dois lados são não negativos, então são iguais exatamente quando seus quadrados são iguais. A diferença dos quadrados é \((|a| + |b|)^{2} - (a + b)^{2} = 2(|a||b| - ab) = 2(|ab| - ab)\). Ela é zero exatamente quando \(|ab| = ab\), isto é, quando \(ab \ge  0\).</div></details></li>
  </ol></div></details></div>
 </section>
 
 <section class="lesson" id="reversa" data-result="desigualdade-triangular-reversa">
  <div class="text">
-  <span class="num">Passo 6 · Proposição 1.1.5</span><h2>Comparar duas distâncias à origem</h2>
-  <div class="statement"><h3>Desigualdade triangular reversa</h3><div class="equation">∀a, b ∈ ℝ, &nbsp; ||a| − |b|| ≤ |a − b|.</div></div>
-  <p>A diferença entre as distâncias de a e b até zero é limitada pela distância entre a e b. Para demonstrar isso, escrevemos a como (a − b) + b e aplicamos a desigualdade que acabamos de provar.</p>
-  <p>Primeiro controlamos |a| − |b|. Depois trocamos os papéis de a e b para controlar o seu oposto. As duas cotas produzem o módulo da diferença.</p>
-  <p class="reference">Livro: proposição 1.1.5 e equações (1.1.4)–(1.1.6), p. 18.</p>
+  <span class="num">Passo 6 · Proposição <a class="xref" href="ordem-e-distancia.html#reversa" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.5</a></span><h2>Comparar duas distâncias à origem</h2>
+  <div class="statement"><h3><a class="xref" href="ordem-e-distancia.html#reversa" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">Desigualdade triangular reversa</a></h3><div class="equation">\[\forall a, b \in  \mathbb{R},   ||a| - |b|| \le  |a - b|\].</div></div>
+  <p>A diferença entre as distâncias de \(a\) e \(b\) até zero é limitada pela distância entre a e \(b\). Para demonstrar isso, escrevemos a como \((a - b) + b\) e aplicamos a desigualdade que acabamos de provar.</p>
+  <p>Primeiro controlamos \(|a| - |b|\). Depois trocamos os papéis de \(a\) e \(b\) para controlar o seu oposto. As duas cotas produzem o módulo da diferença.</p>
+  <p class="reference">Livro: proposição <a class="xref" href="ordem-e-distancia.html#reversa" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">1.1.5</a> e <a class="xref" href="ordem-e-distancia.html#reversa" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">equações (1.1.4)–(1.1.6)</a>, p. 18.</p>
  </div>
  <figure class="bench" id="lab-reverse" data-lab="reverse" data-proof="proof-reverse"><figcaption>Nos dois primeiros passos, compare os percursos. No terceiro, reúna as duas cotas em um intervalo simétrico.</figcaption></figure>
  <div class="proof"><h3>Demonstração</h3><ol id="proof-reverse">
-  <li>Como a = (a − b) + b, a desigualdade triangular dá |a| ≤ |a − b| + |b|. Subtraindo |b|, obtemos |a| − |b| ≤ |a − b|.</li>
-  <li>Trocando a e b, obtemos |b| − |a| ≤ |b − a| = |a − b|. Multiplicar por −1 inverte a ordem: −|a − b| ≤ |a| − |b|.</li>
-  <li>Juntando as duas cotas, −|a − b| ≤ |a| − |b| ≤ |a − b|. Pela equivalência do passo 4 com desigualdades não estritas, isso é ||a| − |b|| ≤ |a − b|.</li>
+  <li>Como \(a = (a - b) + b\), a <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">desigualdade triangular</a> dá \(|a| \le  |a - b| + |b|\). Subtraindo \(|b|\), obtemos \(|a| - |b| \le  |a - b|\).</li>
+  <li>Trocando \(a\) e \(b\), obtemos \(|b| - |a| \le  |b - a| = |a - b|\). Multiplicar por \(-1\) inverte a ordem: \(-|a - b| \le  |a| - |b|\).</li>
+  <li>Juntando as duas cotas, \(-|a - b| \le  |a| - |b| \le  |a - b|\). Pela <a class="xref" href="ordem-e-distancia.html#vizinhancas" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">equivalência do passo 4</a> com desigualdades não estritas, isso é \(||a| - |b|| \le  |a - b|\).</li>
  </ol></div>
- <div class="exercises"><details><summary>Exercício · Usar a desigualdade</summary><div><p>Se |x − a| &lt; ε, com ε &gt; 0, mostre que ||x| − |a|| &lt; ε.</p><details><summary>Ver resolução</summary><div class="answer">A desigualdade triangular reversa fornece ||x| − |a|| ≤ |x − a|. Como, por hipótese, |x − a| &lt; ε, a transitividade dá ||x| − |a|| &lt; ε.</div></details></div></details></div>
+ <div class="exercises"><details><summary>Exercício · Usar a desigualdade</summary><div><p>Se \(|x - a| &lt; \varepsilon \), com \(\varepsilon  &gt; 0\), mostre que \(||x| - |a|| &lt; \varepsilon \).</p><details><summary>Ver resolução</summary><div class="answer">A <a class="xref" href="ordem-e-distancia.html#reversa" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">desigualdade triangular reversa</a> fornece \(||x| - |a|| \le  |x - a|\). Como, por hipótese, \(|x - a| &lt; \varepsilon \), a transitividade dá \(||x| - |a|| &lt; \varepsilon \).</div></details></div></details></div>
 </section>
 
-<section class="coming" aria-label="Cola da aula"><h3>Cola da aula</h3><p>Distância: |x − a|. Intervalo de raio ε &gt; 0: |x − a| &lt; ε ⇔ x ∈ (a − ε, a + ε). Desigualdade triangular: |a + b| ≤ |a| + |b|. Desigualdade reversa: ||a| − |b|| ≤ |a − b|.</p></section>
+<section class="coming" aria-label="Cola da aula"><h3>Cola da aula</h3><p>Distância: \(|x - a|\). Intervalo de raio \(\varepsilon  &gt; 0: |x - a| &lt; \varepsilon  \iff  x \in  (a - \varepsilon , a + \varepsilon )\). <a class="xref" href="ordem-e-distancia.html#triangular" target="_blank" rel="noopener noreferrer" title="Abrir enunciado em nova aba">Desigualdade triangular</a>: \(|a + b| \le  |a| + |b|\). Desigualdade reversa: \(||a| - |b|| \le  |a - b|\).</p></section>
 <nav class="lesson-nav" aria-label="Aulas"><a href="index.html">← Todas as aulas</a><a href="completude-e-aproximacao.html">Completude e aproximação →</a></nav>
-<footer class="colophon"><p>Referência de conteúdo: capítulo 1, “Fatos Básicos”, seção 1.1, das fotos fornecidas por Gabriel. Explicações e exercícios próprios.</p></footer>
+<footer class="colophon"><p>Referência de conteúdo: capítulo \(1\), “Fatos Básicos”, seção \(1.1\), das fotos fornecidas por Gabriel. Explicações e exercícios próprios.</p></footer>
 </main></body></html>
